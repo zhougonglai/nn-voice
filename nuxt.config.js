@@ -1,0 +1,78 @@
+import colors from 'vuetify/es5/util/colors';
+
+export default {
+	mode: 'universal',
+	head: {
+		titleTemplate: '%s - ' + process.env.npm_package_name,
+		title: process.env.npm_package_name || '',
+		meta: [
+			{ charset: 'utf-8' },
+			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
+			{
+				hid: 'description',
+				name: 'description',
+				content: process.env.npm_package_description || '',
+			},
+		],
+		link: [
+			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+			{
+				hid: 'weui',
+				rel: 'stylesheet',
+				type: 'text/css',
+				href: 'https://res.wx.qq.com/open/libs/weui/2.4.0/weui.min.css',
+			},
+		],
+		script: [
+			{ hid: 'iconfont', src: '//at.alicdn.com/t/font_1825109_95q9b1tdfat.js' },
+			{
+				hid: 'weuijs',
+				src: 'https://res.wx.qq.com/open/libs/weuijs/1.2.1/weui.min.js',
+			},
+		],
+	},
+	loading: { color: '#fff' },
+	css: ['~/styles/index.scss'],
+	server: {
+		host: '0.0.0.0',
+	},
+	plugins: [
+		'~/plugins/axios',
+		{
+			src: '~/plugins/wc',
+			mode: 'client',
+		},
+		{
+			src: '~/plugins/localStorage.js',
+			mode: 'client',
+		},
+	],
+	buildModules: ['@nuxtjs/vuetify', '@nuxtjs/tailwindcss'],
+	modules: ['@nuxtjs/axios', '@nuxtjs/pwa', '@nuxtjs/dotenv', '@nuxtjs/proxy'],
+	axios: { proxy: true },
+	proxy: {
+		'/api': {
+			target: 'https://reqres.in',
+		},
+	},
+	vuetify: {
+		customVariables: ['~/styles/variables.scss'],
+		theme: {
+			dark: true,
+			themes: {
+				dark: {
+					primary: colors.blue.darken2,
+					accent: colors.grey.darken3,
+					secondary: colors.amber.darken3,
+					info: colors.teal.lighten1,
+					warning: colors.amber.base,
+					error: colors.deepOrange.accent4,
+					success: colors.green.accent3,
+				},
+			},
+		},
+	},
+	build: {
+		extend(config, ctx) {},
+	},
+};
