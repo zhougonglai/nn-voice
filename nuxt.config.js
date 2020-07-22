@@ -22,12 +22,21 @@ export default {
 			{
 				hid: 'weui',
 				rel: 'stylesheet',
-				type: 'text/css',
 				href: 'https://res.wx.qq.com/open/libs/weui/2.4.0/weui.min.css',
+			},
+			{
+				hid: 'boxicons.css',
+				rel: 'stylesheet',
+				href:
+					'https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css',
 			},
 		],
 		script: [
 			{ hid: 'iconfont', src: '//at.alicdn.com/t/font_1825109_95q9b1tdfat.js' },
+			{
+				hid: 'boxicons.js',
+				src: 'https://unpkg.com/boxicons@latest/dist/boxicons.js',
+			},
 			{
 				hid: 'weuijs',
 				src: 'https://res.wx.qq.com/open/libs/weuijs/1.2.1/weui.min.js',
@@ -46,7 +55,11 @@ export default {
 			mode: 'client',
 		},
 		{
-			src: '~/plugins/localStorage.js',
+			src: '~/plugins/localStorage',
+			mode: 'client',
+		},
+		{
+			src: '~/plugins/rtc',
 			mode: 'client',
 		},
 	],
@@ -54,9 +67,7 @@ export default {
 	modules: ['@nuxtjs/axios', '@nuxtjs/pwa', '@nuxtjs/dotenv', '@nuxtjs/proxy'],
 	axios: { proxy: true },
 	proxy: {
-		'/api': {
-			target: 'https://reqres.in',
-		},
+		'/api': 'https://reqres.in',
 	},
 	vuetify: {
 		customVariables: ['~/styles/variables.scss'],

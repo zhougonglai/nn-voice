@@ -1,18 +1,17 @@
 export const state = () => ({
-  user: ''
-})
+	user: '',
+});
 
 export const actions = {
-  async userAction({ commit }, id) {
-    const user = await this.$axios.$get(`/api/users/${id}`)
-    console.log(user)
-    commit('USER', user)
-    return user
-  }
-}
+	async userAction({ commit }, id) {
+		const { data } = await this.$axios.$get(`/api/users/${id}`);
+		commit('USER', data);
+		return data;
+	},
+};
 
 export const mutations = {
-  USER(state, user) {
-    state.user = user
-  }
-}
+	USER(state, user) {
+		state.user = user;
+	},
+};

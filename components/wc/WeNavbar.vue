@@ -1,25 +1,22 @@
 <template lang="pug">
-.weui-tab
-  .weui-tab__panel
-    slot(name="active")
-  .weui-tabbar
-    slot
+.weui-navbar
+  slot
 </template>
 <script>
 export default {
 	props: {
 		value: {
-			type: [String, Object, Boolean, Number],
+			type: [String, Number, Boolean],
 			required: true,
 		},
 	},
 	provide() {
 		return {
-			wetab: this,
+			navbar: this,
 		};
 	},
 	methods: {
-		switcName(name) {
+		change(name) {
 			this.$emit('input', name);
 			this.$emit('change', name);
 		},
