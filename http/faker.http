@@ -1,0 +1,9 @@
+@Host=http://faker.hook.io
+
+GET {{Host}}
+?property=helpers.userCard&locale=zh_CN
+
+###
+
+GET {{Host}}
+?property=helpers.contextualCard&locale=zh_CN

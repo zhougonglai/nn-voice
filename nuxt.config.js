@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors';
+require('dotenv').config();
 
 export default {
 	mode: 'universal',
@@ -65,9 +66,21 @@ export default {
 	],
 	buildModules: ['@nuxtjs/vuetify', '@nuxtjs/tailwindcss'],
 	modules: ['@nuxtjs/axios', '@nuxtjs/pwa', '@nuxtjs/dotenv', '@nuxtjs/proxy'],
-	axios: { proxy: true },
+	axios: {
+		proxy: true,
+	},
+	env: {},
+	dotenv: {
+		filename: `${process.env.NODE_ENV}.env`,
+	},
 	proxy: {
 		'/api': 'https://reqres.in',
+		'/faker': {
+			target: 'http://faker.hook.io',
+			pathRewrite: {
+				'^/faker': '',
+			},
+		},
 	},
 	vuetify: {
 		customVariables: ['~/styles/variables.scss'],
