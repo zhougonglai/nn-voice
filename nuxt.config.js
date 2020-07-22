@@ -2,6 +2,9 @@ import colors from 'vuetify/es5/util/colors';
 
 export default {
 	mode: 'universal',
+	router: {
+		base: process.env.NODE_ENV === 'production' ? '/nn-voice/' : '',
+	},
 	head: {
 		titleTemplate: '%s - ' + process.env.npm_package_name,
 		title: process.env.npm_package_name || '',
