@@ -4,17 +4,23 @@ on:
   push:
     branches:
       - master
+  pull_request:
+    branches: 
+      - master
 
 jobs:
   deploy:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [ '12', '14' ]
     steps:
       - uses: actions/checkout@v2
 
       - name: Setup Node
         uses: actions/setup-node@v2.1.0
         with:
-          node-version: '12.x'
+          node-version: ${{ matrix.node }}
 
       - name: Cache dependencies
         uses: actions/cache@v2
