@@ -1,6 +1,6 @@
 <template lang="pug">
 .lazy-load-view(v-bind="$attrs")
-  slot(v-if="!ready" name="loading")
+  slot(v-if="!loading" name="loading")
   slot(v-else)
 </template>
 <script>
@@ -16,7 +16,7 @@ export default {
 	},
 	data() {
 		return {
-			ready: false,
+			loading: false,
 		};
 	},
 	mounted() {
@@ -24,7 +24,12 @@ export default {
 	},
 	methods: {
 		initSlot() {
-			this.ready = true;
+			this.loading = true;
+		},
+		async reloading(callback) {
+			this.loading = false;
+			await callback();
+			this.loading = true;
 		},
 	},
 };

@@ -1,12 +1,46 @@
 <template lang="pug">
-#home
-	WeNavbar(v-model="current")
+#home.flex.flex-col.h-full
+	WeNavbar(v-model="current" @change="navChange")
 		WeNavItem(name="message") 消息
 		WeNavItem(name="voice") 语音
-
+	.flex-1.overflow-y-auto
+		template(v-if="current === 'message'")
+			LazyLocadView(:initFN="initCards" v-cloak key="cards")
+				template(#loading)
+					v-skeleton-loader.mx-auto(
+						v-for="ske in 5"
+						:key="ske"
+						type="list-item-avatar-two-line")
+				WePanel
+					WeBox.weui-media-box_appmsg(
+						v-for="card in cards"
+						:key="card.id"
+						:title="card.username"
+						:desc="card.company.catchPhrase")
+						template(#header)
+							img.weui-media-box__thumb(:src="card.avatar")
+						template(#footer)
+							SvgIcon(className="#iconTextchannel")
+		template(v-else)
+			LazyLoadView(:initFN="initUserCards" v-cloak key="userCards")
+				template(#loading)
+					v-skeleton-loader.mx-auto(
+						v-for="ske in 5"
+						:key="ske"
+						type="list-item")
+				.weui-cells
+					WeCell.weui-cell_access(
+						v-for="card in userCards"
+						:key="card.id")
+						template(#header)
+							SvgIcon(className="#iconVoicechannel")
+						.ml-4(v-text="card.username")
+						template(#footer)
+							| {{card.phone}}
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
+import LazyLocadView from '@/components/wc/LazyLoadView';
 
 export default {
 	name: 'home',
@@ -15,14 +49,49 @@ export default {
 			current: 'message',
 		};
 	},
-	mounted() {
-		this.init();
+	components: {
+		LazyLocadView,
+	},
+	computed: {
+		...mapState('channel', ['cards', 'userCards']),
 	},
 	methods: {
 		...mapActions('channel', ['cardAction', 'userCardAction']),
 		init() {
-			this.cardAction();
-			this.userCardAction();
+			return this.initCards();
+		},
+		navChange(name) {
+			const action = {
+				voice: () => this.initCards(),
+				message: () => this.initUserCards(),
+			};
+			action[name]();
+		},
+		async initCards() {
+			if (Object.values(this.cards).length < 11) {
+				return await Promise.all([
+					this.cardAction(),
+					this.cardAction(),
+					this.cardAction(),
+					this.cardAction(),
+					this.cardAction(),
+				]);
+			} else {
+				return true;
+			}
+		},
+		async initUserCards() {
+			if (Object.values(this.userCards).length < 11) {
+				return await Promise.all([
+					this.userCardAction(),
+					this.userCardAction(),
+					this.userCardAction(),
+					this.userCardAction(),
+					this.userCardAction(),
+				]);
+			} else {
+				return true;
+			}
 		},
 	},
 };
