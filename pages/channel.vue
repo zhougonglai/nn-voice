@@ -5,7 +5,7 @@ LazyLoadView(:initFN="init")
 	v-app-bar(app fixed elevate-on-scroll)
 		v-app-bar-nav-icon(@click="$router.back()")
 			box-icon(name='arrow-back')
-		v-toolbar-title(v-text="getCard($route.params.id).username")
+		v-toolbar-title(v-if="userTarget" v-text="`${userTarget.first_name} ${userTarget.last_name}`")
 	v-main
 		v-container.h-full.overflow-y-auto(fluid)
 			nuxt-child
@@ -43,18 +43,15 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters('channel', ['getCard']),
+		...mapGetters('user', ['getUser']),
 		...mapState('user', ['user']),
+		userTarget() {
+			return this.$route.params && this.getUser(this.$route.params.id);
+		},
 	},
 	methods: {
 		async init() {
-			const client = await this.$RTM.createInstance();
-			console.log(client);
-			this.$RTM.connectionStateChanged(this.connectionStateChanged);
-			return await this.$RTM.login(this.user.id.toString());
-		},
-		connectionStateChanged(state, reason) {
-			console.log('connectionStateChanged', state, reason);
+			return await true;
 		},
 		sendMsg() {
 			this.$RTM.sendMessageToPeer({ text: this.input }, this.$route.params.id);

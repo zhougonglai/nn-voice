@@ -21,7 +21,7 @@ LazyLocadView(:initFN="init" v-cloak)
 <script>
 import LazyLocadView from '@/components/wc/LazyLoadView';
 import PageHold from '@/components/container/PageHold';
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapMutations } from 'vuex';
 
 export default {
 	data() {
@@ -41,15 +41,24 @@ export default {
 	},
 	computed: {
 		...mapState('user', ['user']),
+		...mapState('rtm', ['clients']),
 	},
 	methods: {
 		...mapActions('user', ['userAction']),
 		async init() {
 			if (this.user) {
-				return true;
+				return await this.initClient();
 			} else {
 				return await this.userAction(1);
 			}
+		},
+		async initClient() {
+			const client = await this.$RTM.createInstance();
+			this.$RTM.connectionStateChanged(this.connectionStateChanged);
+			return await this.$RTM.login(this.user.id.toString());
+		},
+		connectionStateChanged(state, reason) {
+			console.log('connectionStateChanged', state, reason);
 		},
 		tabChange(name) {
 			this.$router.push(this.tabs[name]);

@@ -1,5 +1,5 @@
 export const state = () => ({
-	clients: [],
+	clients: {},
 	peers: [],
 	channels: [],
 	peerMessage: {},
@@ -10,6 +10,6 @@ export const actions = {};
 
 export const mutations = {
 	concatClient(state, client) {
-		state.clients.concat([client]);
+		state.clients = state.clients.concat([client]);
 	},
 };

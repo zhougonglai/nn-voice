@@ -4,8 +4,6 @@
   slot(v-else)
 </template>
 <script>
-import CircleLoader from './CircleLoader';
-
 export default {
 	props: {
 		// () => new Promise((resolve) => setTimeout(resolve, 0)),
@@ -19,8 +17,9 @@ export default {
 			loading: false,
 		};
 	},
-	mounted() {
-		this.initFN().then(this.initSlot);
+	async mounted() {
+		await this.initFN();
+		this.initSlot();
 	},
 	methods: {
 		initSlot() {

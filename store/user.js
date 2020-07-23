@@ -5,6 +5,10 @@ export const state = () => ({
 	users: [],
 });
 
+export const getters = {
+	getUser: state => id => state.users.find(user => user.id === parseInt(id)),
+};
+
 export const actions = {
 	async userAction({ commit }, id) {
 		// console.log(process.env.API);

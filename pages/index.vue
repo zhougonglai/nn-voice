@@ -61,14 +61,14 @@ export default {
 		...mapActions('user', ['usersAction']),
 		...mapActions('channel', ['cardAction', 'userCardAction']),
 		init() {
-			return this.navChange(this.current);
+			return this.initCards();
 		},
 		navChange(name) {
-			const action = {
-				message: () => this.initCards(),
-				voice: () => this.initUserCards(),
-			};
-			action[name]();
+			// const action = {
+			// 	message: () => this.initCards(),
+			// 	voice: () => this.initUserCards(),
+			// };
+			// action[name]();
 		},
 		async initCards() {
 			return await Promise.all([this.usersAction(1), this.usersAction(2)]);
