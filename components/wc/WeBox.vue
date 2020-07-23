@@ -1,5 +1,5 @@
 <template lang="pug">
-.weui-media-box(v-bind="$attrs")
+.weui-media-box(v-bind="$attrs" v-on="listeners")
   .weui-media-box__hd(v-if="$slots.header")
     slot(name="header")
     //- weui-media-box__thumb
@@ -16,6 +16,19 @@ export default {
 	props: {
 		title: [String, Number],
 		desc: [String, Number],
+	},
+	computed: {
+		listeners() {
+			return {
+				...this.$listeners,
+				click: event => this.handleClick(event),
+			};
+		},
+	},
+	methods: {
+		handleClick(event) {
+			this.$emit('click', event);
+		},
 	},
 };
 </script>

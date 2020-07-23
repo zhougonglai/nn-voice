@@ -1,5 +1,5 @@
 <template lang="pug">
-.weui-tab
+.weui-tab(v-bind="$attrs")
   .weui-tab__panel
     slot(name="active")
   .weui-tabbar

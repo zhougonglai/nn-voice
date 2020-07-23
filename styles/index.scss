@@ -4,3 +4,8 @@ body {
 	background-color: var(--weui-BG-0);
 	color: var(--weui-FG-0);
 }
+
+.safe-aria {
+	padding: env(safe-area-inset-top) env(safe-area-inset-right)
+		env(safe-area-inset-bottom) env(safe-area-inset-left);
+}

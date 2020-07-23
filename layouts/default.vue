@@ -4,7 +4,7 @@ LazyLocadView(:initFN="init" v-cloak)
 		PageHold
 	v-app
 		v-main
-			WeTabs(v-model="active" @change="tabChange")
+			WeTabs.safe-aria(v-model="active" @change="tabChange")
 				template(#active)
 					nuxt
 				WeTabItem(label="主页" name="home")

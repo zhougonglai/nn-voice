@@ -33,7 +33,10 @@ export default {
 			},
 		],
 		script: [
-			{ hid: 'iconfont', src: '//at.alicdn.com/t/font_1825109_95q9b1tdfat.js' },
+			{
+				hid: 'iconfont',
+				src: 'https://at.alicdn.com/t/font_1825109_95q9b1tdfat.js',
+			},
 			{
 				hid: 'boxicons.js',
 				src: 'https://unpkg.com/boxicons@latest/dist/boxicons.js',
@@ -84,20 +87,20 @@ export default {
 	},
 	vuetify: {
 		customVariables: ['~/styles/variables.scss'],
-		theme: {
-			dark: true,
-			themes: {
-				dark: {
-					primary: colors.blue.darken2,
-					accent: colors.grey.darken3,
-					secondary: colors.amber.darken3,
-					info: colors.teal.lighten1,
-					warning: colors.amber.base,
-					error: colors.deepOrange.accent4,
-					success: colors.green.accent3,
-				},
-			},
-		},
+		// theme: {
+		// 	dark: true,
+		// 	themes: {
+		// 		dark: {
+		// 			primary: colors.blue.darken2,
+		// 			accent: colors.grey.darken3,
+		// 			secondary: colors.amber.darken3,
+		// 			info: colors.teal.lighten1,
+		// 			warning: colors.amber.base,
+		// 			error: colors.deepOrange.accent4,
+		// 			success: colors.green.accent3,
+		// 		},
+		// 	},
+		// },
 	},
 	build: {
 		extend(config, ctx) {},

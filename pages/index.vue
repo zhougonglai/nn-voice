@@ -16,6 +16,7 @@
 						v-for="card in cards"
 						:key="card.id"
 						:title="card.username"
+						@click="navigationRoom(card)"
 						:desc="card.company.catchPhrase")
 						template(#header)
 							img.weui-media-box__thumb(:src="card.avatar")
@@ -68,30 +69,21 @@ export default {
 			action[name]();
 		},
 		async initCards() {
-			if (Object.values(this.cards).length < 11) {
-				return await Promise.all([
-					this.cardAction(),
-					this.cardAction(),
-					this.cardAction(),
-					this.cardAction(),
-					this.cardAction(),
-				]);
-			} else {
-				return true;
-			}
+			return await Promise.all([this.cardAction()]);
+			// if (Object.values(this.cards).length < 11) {
+			// } else {
+			// 	return true;
+			// }
 		},
 		async initUserCards() {
-			if (Object.values(this.userCards).length < 11) {
-				return await Promise.all([
-					this.userCardAction(),
-					this.userCardAction(),
-					this.userCardAction(),
-					this.userCardAction(),
-					this.userCardAction(),
-				]);
-			} else {
-				return true;
-			}
+			return await Promise.all([this.userCardAction()]);
+			// if (Object.values(this.userCards).length < 11) {
+			// } else {
+			// 	return true;
+			// }
+		},
+		navigationRoom(card) {
+			this.$router.push(`/channel/${card.id}`);
 		},
 	},
 };
