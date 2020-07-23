@@ -1,3 +1,12 @@
+/*
+	   * [js-sha1]{@link https://github.com/emn178/js-sha1}
+	   *
+	   * @version 0.6.0
+	   * @author Chen, Yi-Cyuan [emn178@gmail.com]
+	   * @copyright Chen, Yi-Cyuan 2014-2017
+	   * @license MIT
+	   */
+
 /*!
   * vue-router v3.3.4
   * (c) 2020 Evan You
@@ -27,6 +36,19 @@
  * (c) 2020 Evan You
  * @license MIT
  */
+
+/*! @preserve
+ * AgoraRTM Web SDK 1.3.0 - commit: v1.3.0-0-gbd90aca
+ * Copyright (C) 2018-2020 Agora Lab.
+ * This file is licensed under the AGORA, INC. SDK LICENSE AGREEMENT
+ * A copy of this license may be found at https://www.agora.io/en/sdk-license-agreement/
+ */
+
+/**
+	   * @file Web Cryptography API shim
+	   * @author Artem S Vybornov <vybornov@gmail.com>
+	   * @license MIT
+	   */
 
 /**
  * @license
