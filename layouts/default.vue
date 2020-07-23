@@ -33,6 +33,7 @@ export default {
 				more: '/more',
 				me: '/me',
 			},
+			darkmode: false,
 		};
 	},
 	components: {
@@ -42,6 +43,11 @@ export default {
 	computed: {
 		...mapState('user', ['user']),
 		...mapState('rtm', ['clients']),
+	},
+	mounted() {
+		this.$vuetify.theme.dark = matchMedia(
+			'(prefers-color-scheme: dark)',
+		).matches;
 	},
 	methods: {
 		...mapActions('user', ['userAction']),

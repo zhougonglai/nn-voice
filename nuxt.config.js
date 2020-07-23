@@ -50,7 +50,6 @@ export default {
 	loading: { color: '#fff' },
 	css: ['~/styles/index.scss'],
 	server: {
-		port: 8080,
 		host: '0.0.0.0',
 	},
 	plugins: [
