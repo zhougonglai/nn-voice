@@ -23,13 +23,13 @@ LazyLoadView(:initFN="init")
 			template(#append)
 				.w-6.h-6.flex.items-center.justify-center
 					SvgIcon(className="#iconemoji")
-				.w-6.h-6.flex.items-center.justify-center
+				.w-6.h-6.flex.items-center.justify-center(@click="sendMsg")
 					box-icon(name='send' type='solid')
 </template>
 <script>
 import LazyLoadView from '@/components/wc/LazyLoadView';
 import CircleLoader from '@/components/wc/CircleLoader';
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
 	layout: 'channel',
@@ -44,10 +44,20 @@ export default {
 	},
 	computed: {
 		...mapGetters('channel', ['getCard']),
+		...mapState('user', ['user']),
 	},
 	methods: {
-		init() {
-			return new Promise(resolve => setTimeout(resolve, 250));
+		async init() {
+			const client = await this.$RTM.createInstance();
+			console.log(client);
+			this.$RTM.connectionStateChanged(this.connectionStateChanged);
+			return await this.$RTM.login(this.user.id.toString());
+		},
+		connectionStateChanged(state, reason) {
+			console.log('connectionStateChanged', state, reason);
+		},
+		sendMsg() {
+			this.$RTM.sendMessageToPeer({ text: this.input }, this.$route.params.id);
 		},
 	},
 };

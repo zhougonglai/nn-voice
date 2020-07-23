@@ -1,5 +1,8 @@
+import { uniqBy } from 'lodash';
+
 export const state = () => ({
 	user: '',
+	users: [],
 });
 
 export const actions = {
@@ -9,10 +12,27 @@ export const actions = {
 		commit('USER', data);
 		return data;
 	},
+	async usersAction({ commit }, page) {
+		const { data } = await this.$axios.$get(`${process.env.API}/users`, {
+			params: { page },
+		});
+		if (page > 1) {
+			commit('CONCAT_USERS', data);
+		} else {
+			commit('USERS', data);
+		}
+		return data;
+	},
 };
 
 export const mutations = {
 	USER(state, user) {
 		state.user = user;
+	},
+	USERS(state, users) {
+		state.users = users;
+	},
+	CONCAT_USERS(state, users) {
+		state.users = uniqBy(state.users.concat(users), 'id');
 	},
 };

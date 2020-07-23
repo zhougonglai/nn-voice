@@ -10,5 +10,6 @@ export default ({ store }) => {
 			setItem: (key, value) => ls.set(key, value),
 			removeItem: key => ls.remove(key),
 		},
+		path: ['channel', 'user'],
 	})(store);
 };

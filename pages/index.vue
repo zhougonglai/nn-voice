@@ -13,15 +13,15 @@
 						type="list-item-avatar-two-line")
 				WePanel
 					WeBox.weui-media-box_appmsg(
-						v-for="card in cards"
-						:key="card.id"
-						:title="card.username"
-						@click="navigationRoom(card)"
-						:desc="card.company.catchPhrase")
+						v-for="user in users"
+						:key="user.id"
+						:title="`${user.first_name} ${user.last_name}`"
+						@click="navigationRoom(user)"
+						:desc="user.email")
 						template(#header)
-							img.weui-media-box__thumb(:src="card.avatar")
+							img.weui-media-box__thumb(:src="user.avatar")
 						template(#footer)
-							SvgIcon(className="#iconTextchannel")
+							box-icon(name='send' type='solid')
 		template(v-else)
 			LazyLoadView(:initFN="initUserCards" v-cloak key="userCards")
 				template(#loading)
@@ -54,33 +54,27 @@ export default {
 		LazyLocadView,
 	},
 	computed: {
+		...mapState('user', ['users']),
 		...mapState('channel', ['cards', 'userCards']),
 	},
 	methods: {
+		...mapActions('user', ['usersAction']),
 		...mapActions('channel', ['cardAction', 'userCardAction']),
 		init() {
-			return this.initCards();
+			return this.navChange(this.current);
 		},
 		navChange(name) {
 			const action = {
-				voice: () => this.initCards(),
-				message: () => this.initUserCards(),
+				message: () => this.initCards(),
+				voice: () => this.initUserCards(),
 			};
 			action[name]();
 		},
 		async initCards() {
-			return await Promise.all([this.cardAction()]);
-			// if (Object.values(this.cards).length < 11) {
-			// } else {
-			// 	return true;
-			// }
+			return await Promise.all([this.usersAction(1), this.usersAction(2)]);
 		},
 		async initUserCards() {
 			return await Promise.all([this.userCardAction()]);
-			// if (Object.values(this.userCards).length < 11) {
-			// } else {
-			// 	return true;
-			// }
 		},
 		navigationRoom(card) {
 			this.$router.push(`/channel/${card.id}`);
