@@ -1,15 +1,34 @@
 export const state = () => ({
-	clients: {},
-	peers: [],
-	channels: [],
-	peerMessage: {},
-	channelMessage: {},
+	peersStatus: {},
+	connect: {
+		state: '',
+		reason: '',
+	},
+	messages: [],
 });
 
-export const actions = {};
+export const getters = {
+	getMessages: state => pid =>
+		state.messages.filter(messages => messages.pid === pid),
+};
+
+export const actions = {
+	async peersStatusAction({ commit }, uids) {
+		const status = await this.$RTM.queryPeersOnlineStatus(uids);
+		commit('PEERS_STATUS', status);
+		return status;
+	},
+};
 
 export const mutations = {
-	concatClient(state, client) {
-		state.clients = state.clients.concat([client]);
+	PEERS_STATUS(state, status) {
+		state.peersStatus = status;
+	},
+	CONNECT_CHANGE(state, { status, reason }) {
+		state.connect.state = status;
+		state.connect.reason = reason;
+	},
+	MSG_UPDATE(state, msg) {
+		state.messages = state.messages.concat([msg]);
 	},
 };

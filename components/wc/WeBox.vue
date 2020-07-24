@@ -1,5 +1,5 @@
 <template lang="pug">
-.weui-media-box(v-bind="$attrs" v-on="listeners")
+.weui-media-box(v-bind="$attrs" v-on="listeners" :class="{'has_dot': hasDot}")
   .weui-media-box__hd(v-if="$slots.header")
     slot(name="header")
     //- weui-media-box__thumb
@@ -16,6 +16,7 @@ export default {
 	props: {
 		title: [String, Number],
 		desc: [String, Number],
+		hasDot: Boolean,
 	},
 	computed: {
 		listeners() {
@@ -32,3 +33,17 @@ export default {
 	},
 };
 </script>
+<style lang="scss">
+.weui-media-box {
+	&.has_dot {
+		.weui-media-box__hd {
+			position: relative;
+			.weui-badge {
+				position: absolute;
+				top: 4px;
+				right: 4px;
+			}
+		}
+	}
+}
+</style>

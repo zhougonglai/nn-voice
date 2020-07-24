@@ -5,14 +5,17 @@ LazyLoadView(:initFN="init")
 	v-app-bar(app fixed elevate-on-scroll)
 		v-app-bar-nav-icon(@click="$router.back()")
 			box-icon(name='arrow-back')
-		v-toolbar-title(v-if="userTarget" v-text="`${userTarget.first_name} ${userTarget.last_name}`")
+		v-toolbar-title(v-if="userTarget"  @click="switcher") {{userTarget.first_name}} {{userTarget.last_name}}
+			template(v-if="peersStatus && isFinite(peersStatus[user.id])")
+				WeBage.weui-badge_dot.ml-5(:class="{'bg-success': peersStatus[userTarget.id]}")
 	v-main
 		v-container.h-full.overflow-y-auto(fluid)
 			nuxt-child
 	v-footer.safe-aria(app fixed)
 		v-input(dense :hide-details="true")
 			template(#prepend)
-				box-icon(name='equalizer')
+				.w-10.h-10.flex.items-center.justify-center
+					box-icon(name='equalizer')
 			v-textarea(
 				dense
 				filled
@@ -21,9 +24,9 @@ LazyLoadView(:initFN="init")
 				rows="1"
 				row-height="20")
 			template(#append)
-				.w-6.h-6.flex.items-center.justify-center
+				.w-10.h-10.flex.items-center.justify-center
 					SvgIcon(className="#iconemoji")
-				.w-6.h-6.flex.items-center.justify-center(@click="sendMsg")
+				.w-10.h-10.flex.items-center.justify-center(@click="sendMsg")
 					box-icon(name='send' type='solid')
 </template>
 <script>
@@ -44,7 +47,8 @@ export default {
 	},
 	computed: {
 		...mapGetters('user', ['getUser']),
-		...mapState('user', ['user']),
+		...mapState('user', ['user', 'users']),
+		...mapState('rtm', ['peersStatus']),
 		userTarget() {
 			return this.$route.params && this.getUser(this.$route.params.id);
 		},
@@ -54,7 +58,29 @@ export default {
 			return await true;
 		},
 		sendMsg() {
-			this.$RTM.sendMessageToPeer({ text: this.input }, this.$route.params.id);
+			this.$RTM.sendPeerMessage(this.input, this.$route.params.id);
+		},
+		switcher() {
+			console.log('switcher');
+			window.weui.picker(
+				this.users.map(user => ({
+					...user,
+					label: `${user.first_name} ${user.last_name}`,
+					value: user.id,
+				})),
+				{
+					className: 'custom-classname',
+					container: 'body',
+					defaultValue: [this.$route.params.id],
+					onChange: function(result) {
+						console.log(result);
+					},
+					onConfirm: function(result) {
+						console.log(result);
+					},
+					id: 'singleLinePicker',
+				},
+			);
 		},
 	},
 };

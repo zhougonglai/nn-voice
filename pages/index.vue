@@ -15,7 +15,7 @@ import PeerToPeer from '@/components/container/PeerToPeer';
 import PeerToChannel from '@/components/container/PeerToChannel';
 
 export default {
-	name: 'home',
+	name: 'index',
 	data() {
 		return {
 			current: 'message',

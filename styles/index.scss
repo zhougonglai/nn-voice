@@ -9,3 +9,33 @@ body {
 	padding: env(safe-area-inset-top) env(safe-area-inset-right)
 		env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
+
+.success {
+	color: #91d300;
+	color: var(--weui-GREEN);
+}
+
+.bg-success {
+	background-color: #91d300;
+	background-color: var(--weui-GREEN);
+}
+
+.warning {
+	color: #fa9d3b;
+	color: var(--weui-TAG-TEXT-ORANGE);
+}
+
+.bg-warning {
+	background-color: #fa9d3b;
+	background-color: var(--weui-TAG-TEXT-ORANGE);
+}
+
+.danger {
+	color: #fa5151;
+	color: var(--weui-RED);
+}
+
+.bg-danger {
+	background-color: #fa5151;
+	background-color: var(--weui-RED);
+}

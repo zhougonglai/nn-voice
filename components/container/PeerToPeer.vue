@@ -7,13 +7,16 @@ LazyLoadView(:initFN="initCards" v-cloak key="cards")
       type="list-item-avatar-two-line")
   WePanel
     WeBox.weui-media-box_appmsg(
-      v-for="user in users"
+      v-for="user in users.filter($user => $user.id !== user.id)"
       :key="user.id"
+      hasDot
       :title="`${user.first_name} ${user.last_name}`"
-      @click="navigationRoom(user)"
+      @click="navigationChat(user)"
       :desc="user.email")
       template(#header)
-        img.weui-media-box__thumb(:src="user.avatar")
+        img.rounded-lg.weui-media-box__thumb(:src="user.avatar")
+        template(v-if="peersStatus && isFinite(peersStatus[user.id])")
+          WeBage.weui-badge_dot(:class="{'bg-success': peersStatus[user.id]}")
       template(#footer)
         box-icon(name='send' type='solid')
 </template>
@@ -26,15 +29,22 @@ export default {
 		LazyLoadView,
 	},
 	computed: {
-		...mapState('user', ['users']),
+		...mapState('user', ['user', 'users']),
+		...mapState('rtm', ['peersStatus']),
 	},
 	methods: {
 		...mapActions('user', ['usersAction']),
+		...mapActions('rtm', ['peersStatusAction']),
 		async initCards() {
-			return await Promise.all([this.usersAction(1), this.usersAction(2)]);
+			await this.usersAction(1);
+			await this.usersAction(2);
+			return true;
 		},
-		navigationRoom(card) {
-			this.$router.push(`/channel/${card.id}`);
+		async updatePeersStatus() {
+			return this.peersStatusAction(this.users.map(user => user.id.toString()));
+		},
+		navigationChat(card) {
+			this.$router.push(`/peer/${card.id}`);
 		},
 	},
 };

@@ -16,7 +16,7 @@ export const actions = {
 		commit('USER', data);
 		return data;
 	},
-	async usersAction({ commit }, page) {
+	async usersAction({ commit, state }, page) {
 		const { data } = await this.$axios.$get(`${process.env.API}/users`, {
 			params: { page },
 		});

@@ -9,6 +9,7 @@ LazyLocadView(:initFN="init" v-cloak)
 import LazyLocadView from '@/components/wc/LazyLoadView';
 import PageHold from '@/components/container/PageHold';
 import { mapState, mapActions } from 'vuex';
+import RTMmixin from '@/mixins/rtm';
 
 export default {
 	name: 'ChannelLayout',
@@ -19,6 +20,7 @@ export default {
 		LazyLocadView,
 		PageHold,
 	},
+	mixins: [RTMmixin],
 	computed: {
 		...mapState('user', ['user']),
 	},
