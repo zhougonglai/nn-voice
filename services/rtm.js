@@ -1,15 +1,26 @@
 import AgoraRTM from 'agora-rtm-sdk';
+import EventEmitter from 'events';
 
 const CHANNEL_MESSAGE = 'ChannelMessage';
 const MESSAGE_FROM_PEER = 'MessageFromPeer';
 
-export default class RTM {
+export default class RTM extends EventEmitter {
 	appId = '921f058a58694b73b69f62a061d9d070';
 	client;
 	channel;
 
 	createInstance() {
 		return (this.client = AgoraRTM.createInstance(this.appId));
+	}
+
+	subscribeClientEvents() {
+		const clentEvents = [CHANNEL_MESSAGE, MESSAGE_FROM_PEER];
+		clentEvents.forEach(eventName => {
+			this.client.on(eventName, (...args) => {
+				console.log('emit', eventName, ...args);
+				this.emit(eventName, ...args);
+			});
+		});
 	}
 
 	/**

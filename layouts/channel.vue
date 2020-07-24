@@ -11,6 +11,7 @@ import PageHold from '@/components/container/PageHold';
 import { mapState, mapActions } from 'vuex';
 
 export default {
+	name: 'ChannelLayout',
 	data() {
 		return {};
 	},

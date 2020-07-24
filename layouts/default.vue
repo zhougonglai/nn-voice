@@ -7,9 +7,9 @@ LazyLocadView(:initFN="init" v-cloak)
 			WeTabs.safe-aria(v-model="active" @change="tabChange")
 				template(#active)
 					nuxt
-				WeTabItem(label="主页" name="home")
+				WeTabItem(label="主页" name="index")
 					template(#icon)
-						i.bx.weui-tabbar__icon(:class="[ active === 'home' ? 'bxs-home' : 'bx-home']")
+						i.bx.weui-tabbar__icon(:class="[ active === 'index' ? 'bxs-home' : 'bx-home']")
 				WeTabItem(label='更多社区' name="more")
 					template(#icon)
 						i.bx.weui-tabbar__icon(:class="[ active === 'more' ? 'bxs-grid-alt' : 'bx-grid-alt' ]")
@@ -24,12 +24,13 @@ import PageHold from '@/components/container/PageHold';
 import { mapState, mapActions, mapMutations } from 'vuex';
 
 export default {
+	name: 'DefaultLayout',
 	data() {
 		return {
 			drawer: false,
-			active: 'home',
+			active: null,
 			tabs: {
-				home: '/',
+				index: '/',
 				more: '/more',
 				me: '/me',
 			},
@@ -48,6 +49,7 @@ export default {
 		this.$vuetify.theme.dark = matchMedia(
 			'(prefers-color-scheme: dark)',
 		).matches;
+		this.active = this.$route.name;
 	},
 	methods: {
 		...mapActions('user', ['userAction']),
@@ -59,9 +61,13 @@ export default {
 			}
 		},
 		async initClient() {
-			const client = await this.$RTM.createInstance();
-			this.$RTM.connectionStateChanged(this.connectionStateChanged);
-			return await this.$RTM.login(this.user.id.toString());
+			if (!this.$RTM.client) {
+				const client = await this.$RTM.createInstance();
+				this.$RTM.connectionStateChanged(this.connectionStateChanged);
+				this.$RTM.subscribeClientEvents();
+				return await this.$RTM.login(this.user.id.toString());
+			}
+			return true;
 		},
 		connectionStateChanged(state, reason) {
 			console.log('connectionStateChanged', state, reason);
