@@ -31,6 +31,11 @@ export default {
 				href:
 					'https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css',
 			},
+			{
+				hid: 'mdi',
+				rel: 'stylesheet',
+				href: 'https://fonts.googleapis.com/css?family=Material+Icons',
+			},
 		],
 		script: [
 			{

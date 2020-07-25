@@ -18,7 +18,7 @@ LazyLoadView(:initFN="initCards" v-cloak key="cards")
         template(v-if="peersStatus && isFinite(peersStatus[user.id])")
           WeBage.weui-badge_dot(:class="{'bg-success': peersStatus[user.id]}")
       template(#footer)
-        box-icon(name='send' type='solid')
+        box-icon(name='send' type='solid' :color="$vuetify.theme.dark ? 'white' : 'black'")
 </template>
 <script>
 import { mapState, mapActions } from 'vuex';
@@ -36,8 +36,7 @@ export default {
 		...mapActions('user', ['usersAction']),
 		...mapActions('rtm', ['peersStatusAction']),
 		async initCards() {
-			await this.usersAction(1);
-			await this.usersAction(2);
+			await this.usersAction(1).catch(e => {});
 			return true;
 		},
 		async updatePeersStatus() {

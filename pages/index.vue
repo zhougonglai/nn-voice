@@ -1,11 +1,11 @@
 <template lang="pug">
 #home.flex.flex-col.h-full
-	WeNavbar(v-model="current" @change="navChange")
-		WeNavItem(name="message") 消息
-		WeNavItem(name="voice") 语音
+	WeNavbar(v-model="current")
+		WeNavItem(name="peer") 好友
+		WeNavItem(name="channel") 频道
 	.flex-1.overflow-y-auto
 		keep-alive(:include="['PeerToPeer', 'PeerToChannel']")
-			PeerToPeer(v-if="current === 'message'")
+			PeerToPeer(v-if="current === 'peer'")
 			PeerToChannel(v-else)
 </template>
 <script>
@@ -18,37 +18,13 @@ export default {
 	name: 'index',
 	data() {
 		return {
-			current: 'message',
+			current: 'peer',
 		};
 	},
 	components: {
 		LazyLocadView,
 		PeerToPeer,
 		PeerToChannel,
-	},
-	computed: {
-		...mapState('user', ['users']),
-		...mapState('channel', ['cards', 'userCards']),
-	},
-	methods: {
-		...mapActions('user', ['usersAction']),
-		...mapActions('channel', ['cardAction', 'userCardAction']),
-		init() {
-			return this.initCards();
-		},
-		navChange(name) {
-			// const action = {
-			// 	message: () => this.initCards(),
-			// 	voice: () => this.initUserCards(),
-			// };
-			// action[name]();
-		},
-		async initCards() {
-			return await Promise.all([this.usersAction(1), this.usersAction(2)]);
-		},
-		async initUserCards() {
-			return await Promise.all([this.userCardAction()]);
-		},
 	},
 };
 </script>

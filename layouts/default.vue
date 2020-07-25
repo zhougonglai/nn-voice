@@ -6,7 +6,7 @@ LazyLocadView(:initFN="init" v-cloak)
 		v-main
 			WeTabs.safe-aria(v-model="active" @change="tabChange")
 				template(#active)
-					keep-alive(:include="['index', 'me']")
+					keep-alive(:include="['index', 'more', 'me']")
 						nuxt
 				WeTabItem(label="主页" name="index")
 					template(#icon)

@@ -24,6 +24,11 @@ export default {
 	computed: {
 		...mapState('user', ['user']),
 	},
+	mounted() {
+		this.$vuetify.theme.dark = matchMedia(
+			'(prefers-color-scheme: dark)',
+		).matches;
+	},
 	methods: {
 		...mapActions('user', ['userAction']),
 		async init() {
