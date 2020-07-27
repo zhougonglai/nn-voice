@@ -1,12 +1,12 @@
 <template lang="pug">
-#home.flex.flex-col.h-full
+#home.h-full.overflow-y-auto
+	Banners(:data="banners")
 	WeNavbar(v-model="current")
 		WeNavItem(name="peer") 好友
 		WeNavItem(name="channel") 频道
-	.flex-1.overflow-y-auto
-		keep-alive(:include="['PeerToPeer', 'PeerToChannel']")
-			PeerToPeer(v-if="current === 'peer'")
-			PeerToChannel(v-else)
+	keep-alive(:include="['PeerToPeer', 'PeerToChannel']")
+		PeerToPeer(v-if="current === 'peer'")
+		PeerToChannel(v-else)
 </template>
 <script>
 import { mapState, mapActions } from 'vuex';
@@ -19,6 +19,23 @@ export default {
 	data() {
 		return {
 			current: 'peer',
+			banners: [
+				{
+					url: 'https://api.adorable.io/avatars/285/1.png',
+				},
+				{
+					url: 'https://api.adorable.io/avatars/285/2.png',
+				},
+				{
+					url: 'https://api.adorable.io/avatars/285/3.png',
+				},
+				{
+					url: 'https://api.adorable.io/avatars/285/4.png',
+				},
+				{
+					url: 'https://api.adorable.io/avatars/285/5.png',
+				},
+			],
 		};
 	},
 	components: {

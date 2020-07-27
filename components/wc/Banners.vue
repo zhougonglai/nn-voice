@@ -76,6 +76,7 @@ export default {
 		return {
 			current: 0,
 			banners: null,
+			animating: false,
 		};
 	},
 	mounted() {
@@ -87,14 +88,20 @@ export default {
 			this.$emit('input', index);
 		},
 		handleClick() {
-			this.banners.index = this.banners.next.index;
-			this.banners.active.active = false;
-			this.banners.active = this.banners.next;
-			this.banners.next = this.banners.last;
-			if (this.banners.next.index === this.banners.banners.length - 1) {
-				this.banners.last = this.banners.banners[0];
-			} else {
-				this.banners.last = this.banners.banners[this.banners.next.index + 1];
+			if (!this.animating) {
+				this.animating = true;
+				this.banners.index = this.banners.next.index;
+				this.banners.active.active = false;
+				this.banners.active = this.banners.next;
+				this.banners.next = this.banners.last;
+				if (this.banners.next.index === this.banners.banners.length - 1) {
+					this.banners.last = this.banners.banners[0];
+				} else {
+					this.banners.last = this.banners.banners[this.banners.next.index + 1];
+				}
+				setTimeout(() => {
+					this.animating = false;
+				}, 200);
 			}
 		},
 	},

@@ -8,8 +8,10 @@ export const state = () => ({
 });
 
 export const getters = {
-	getMessages: state => pid =>
-		state.messages.filter(messages => messages.pid == pid),
+	getMessages: state => uid =>
+		state.messages
+			.filter(messages => messages.pid == uid || messages.sendTo == uid)
+			.sort((a, b) => a.serverReceivedTs - b.serverReceivedTs),
 };
 
 export const actions = {
@@ -22,7 +24,10 @@ export const actions = {
 
 export const mutations = {
 	PEERS_STATUS(state, status) {
-		state.peersStatus = status;
+		state.peersStatus = {
+			...state.peersStatus,
+			...status,
+		};
 	},
 	CONNECT_CHANGE(state, { status, reason }) {
 		state.connect.state = status;

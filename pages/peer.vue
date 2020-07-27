@@ -29,7 +29,7 @@ LazyLoadView(:initFN="init")
 				dense
 				filled
 				auto-grow
-				v-model="input"
+				v-model.trim="input"
 				rows="1"
 				row-height="20")
 			template(#append)
@@ -41,7 +41,8 @@ LazyLoadView(:initFN="init")
 <script>
 import LazyLoadView from '@/components/wc/LazyLoadView';
 import CircleLoader from '@/components/wc/CircleLoader';
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex';
+import { throttle } from 'lodash';
 
 export default {
 	layout: 'channel',
@@ -52,6 +53,11 @@ export default {
 	data() {
 		return {
 			input: '',
+			loading: {
+				send: false,
+				emoj: false,
+				audio: false,
+			},
 		};
 	},
 	computed: {
@@ -63,23 +69,27 @@ export default {
 		},
 	},
 	methods: {
-		...mapActions('rtm', ['PEERS_STATUS']),
+		...mapMutations('rtm', ['MSG_UPDATE']),
 		async init() {
 			return await true;
 		},
-		async sendMsg() {
-			const { hasPeerReceived } = await this.$RTM.sendPeerMessage(
-				this.input,
-				this.$route.params.id,
-			);
-			this.PEERS_STATUS({
-				messageType: 'TEXT',
-				pid: this.user.id,
-				text: this.input,
-				serverReceivedTs: Date.now(),
-				received: hasPeerReceived,
-			});
-		},
+		sendMsg: throttle(async function() {
+			if (this.input) {
+				const { hasPeerReceived } = await this.$RTM.sendPeerMessage(
+					this.input,
+					this.$route.params.id,
+				);
+				this.MSG_UPDATE({
+					messageType: 'TEXT',
+					pid: this.user.id,
+					sendTo: this.$route.params.id,
+					text: this.input,
+					serverReceivedTs: Date.now(),
+					received: hasPeerReceived,
+				});
+				this.input = '';
+			}
+		}, 650),
 		switcher() {
 			console.log('switcher');
 			window.weui.picker(
