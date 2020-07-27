@@ -35,12 +35,25 @@ export default {
 </script>
 <style lang="scss">
 .weui-media-box {
+	.weui-media-box__ft {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 	&.has_dot {
 		.weui-media-box__hd {
 			position: relative;
 			.weui-badge {
 				position: absolute;
 				top: 4px;
+				right: 4px;
+			}
+		}
+		.weui-media-box__ft {
+			position: relative;
+			.weui-badge {
+				position: absolute;
+				bottom: 0;
 				right: 4px;
 			}
 		}

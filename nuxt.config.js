@@ -1,5 +1,5 @@
 import colors from 'vuetify/es5/util/colors';
-require('dotenv').config();
+// require('dotenv').config();
 
 export default {
 	mode: 'universal',
@@ -79,7 +79,7 @@ export default {
 	},
 	env: {},
 	dotenv: {
-		filename: `${process.env.NODE_ENV}.env`,
+		filename: `.env.${process.env.NODE_ENV}`,
 	},
 	proxy: {
 		'/api': 'https://reqres.in',

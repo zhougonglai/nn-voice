@@ -1,6 +1,6 @@
 <template lang="pug">
 #more
-	Banners(v-model="index" :active="banners[index]" :before="beforeActive" :after="afterActive")
+	Banners(:data="banners")
 </template>
 <script>
 import Banners from '@/components/wc/Banners';
@@ -18,39 +18,22 @@ export default {
 			banner: 'https://api.adorable.io/avatars/285/',
 			banners: [
 				{
-					key: 1,
 					url: 'https://api.adorable.io/avatars/285/1.png',
 				},
 				{
-					key: 2,
 					url: 'https://api.adorable.io/avatars/285/2.png',
 				},
 				{
-					key: 3,
 					url: 'https://api.adorable.io/avatars/285/3.png',
 				},
 				{
-					key: 4,
 					url: 'https://api.adorable.io/avatars/285/4.png',
 				},
 				{
-					key: 5,
 					url: 'https://api.adorable.io/avatars/285/5.png',
 				},
 			],
 		};
-	},
-	computed: {
-		beforeActive() {
-			return this.index === 0
-				? this.banners[this.banners.length - 1]
-				: this.banners[this.index - 1];
-		},
-		afterActive() {
-			return this.index === this.banners.length - 1
-				? this.banners[0]
-				: this.banners[this.index + 1];
-		},
 	},
 };
 </script>

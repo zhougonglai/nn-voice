@@ -41,7 +41,7 @@ LazyLoadView(:initFN="init")
 <script>
 import LazyLoadView from '@/components/wc/LazyLoadView';
 import CircleLoader from '@/components/wc/CircleLoader';
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
 	layout: 'channel',
@@ -63,11 +63,22 @@ export default {
 		},
 	},
 	methods: {
+		...mapActions('rtm', ['PEERS_STATUS']),
 		async init() {
 			return await true;
 		},
-		sendMsg() {
-			this.$RTM.sendPeerMessage(this.input, this.$route.params.id);
+		async sendMsg() {
+			const { hasPeerReceived } = await this.$RTM.sendPeerMessage(
+				this.input,
+				this.$route.params.id,
+			);
+			this.PEERS_STATUS({
+				messageType: 'TEXT',
+				pid: this.user.id,
+				text: this.input,
+				serverReceivedTs: Date.now(),
+				received: hasPeerReceived,
+			});
 		},
 		switcher() {
 			console.log('switcher');

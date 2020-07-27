@@ -9,7 +9,7 @@ export const state = () => ({
 
 export const getters = {
 	getMessages: state => pid =>
-		state.messages.filter(messages => messages.pid === pid),
+		state.messages.filter(messages => messages.pid == pid),
 };
 
 export const actions = {

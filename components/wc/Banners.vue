@@ -1,32 +1,101 @@
 <template lang="pug">
 .banners.w-full
-	.banner.before(@click="handleClick('before')")
-		img(:src="before.url")
-	.banner.active(@click="handleClick('active')")
-		img(:src="active.url")
-	.banner.after(@click="handleClick('after')")
-		img(:src="after.url")
+	template(v-if="banners")
+		.banner(
+			v-for="(banner, i) in banners.banners" :key="i"
+			:class="{active: banner.active, next: banner.next, last: banner.last}"
+			@click="!banner.active && handleClick(banner, i)")
+			img(:src="banner.url")
 </template>
 <script>
+import { take, drop, findIndex } from 'lodash';
+
+class Banner {
+	active = false;
+	next = false;
+	last = false;
+	constructor(url, i, end) {
+		this.url = url;
+		this.index = i;
+		this.end = end;
+	}
+
+	get show() {
+		return this.active || this.next || this.last;
+	}
+}
+
+class Banners {
+	constructor(banners) {
+		this.banners = banners.map(
+			(banner, i) => new Banner(banner.url, i, i === banners.length),
+		);
+		this.banners[0].active = true;
+		this.banners[1].next = true;
+		this.banners[2].last = true;
+		this.index = 0;
+	}
+
+	get active() {
+		return this.banners.find(banner => banner.active);
+	}
+
+	set active(banner) {
+		banner.active = true;
+		banner.next = false;
+		banner.last = false;
+	}
+
+	get next() {
+		return this.banners.find(banner => banner.next);
+	}
+
+	set next(banner) {
+		banner.active = false;
+		banner.next = true;
+		banner.last = false;
+	}
+
+	get last() {
+		return this.banners.find(banner => banner.last);
+	}
+
+	set last(banner) {
+		banner.active = false;
+		banner.next = false;
+		banner.last = true;
+	}
+}
+
 export default {
 	props: {
-		value: [String, Number],
-		before: Object,
-		after: Object,
-		active: Object,
+		value: Number,
+		data: Array,
+	},
+	data() {
+		return {
+			current: 0,
+			banners: null,
+		};
+	},
+	mounted() {
+		this.banners = new Banners(this.data);
 	},
 	methods: {
 		activer(index) {
 			console.log(index);
 			this.$emit('input', index);
 		},
-		handleClick(index) {
-			const action = {
-				before: () => this.$emit('before'),
-				active: () => this.$emit('input', this.value + 1),
-				after: () => this.$emit('input', this.value + 2),
-			};
-			action[index]();
+		handleClick() {
+			this.banners.index = this.banners.next.index;
+			this.banners.active.active = false;
+			this.banners.active = this.banners.next;
+			this.banners.next = this.banners.last;
+			if (this.banners.next.index === this.banners.banners.length - 1) {
+				this.banners.last = this.banners.banners[0];
+			} else {
+				this.banners.last = this.banners.banners[this.banners.next.index + 1];
+			}
 		},
 	},
 };
@@ -50,16 +119,17 @@ export default {
 	left: 50%;
 	border-radius: 10px;
 	overflow: hidden;
+	transform: scale(0);
 	transition: transform 0.2s ease;
-	&.before {
+	&.active {
 		transform: translate3d(calc(-50px - 50%), -50%, 0px) scale(1);
 		z-index: 10;
 	}
-	&.active {
+	&.next {
 		transform: translate3d(calc(25px - 50%), -50%, -150px) scale(1);
 		z-index: 1;
 	}
-	&.after {
+	&.last {
 		display: block;
 		transform: translate3d(calc(100px - 50%), -50%, -300px) scale(1);
 		z-index: 0;

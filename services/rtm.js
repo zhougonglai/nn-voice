@@ -4,6 +4,7 @@ import EventEmitter from 'events';
 // p2p Events
 const CONNECTION_STATE_CHANGED = 'ConnectionStateChanged';
 const MESSAGE_FROM_PEER = 'MessageFromPeer';
+const PEERS_ONLINE_STATUS_CHANGED = 'PeersOnlineStatusChanged';
 
 // p2c Events
 const CHANNEL_MESSAGE = 'ChannelMessage';
@@ -23,7 +24,11 @@ export default class RTM extends EventEmitter {
 	}
 
 	subscribeClientEvents() {
-		const clentEvents = [CONNECTION_STATE_CHANGED, MESSAGE_FROM_PEER];
+		const clentEvents = [
+			CONNECTION_STATE_CHANGED,
+			MESSAGE_FROM_PEER,
+			PEERS_ONLINE_STATUS_CHANGED,
+		];
 		clentEvents.forEach(eventName => {
 			this.client.on(eventName, (...args) => {
 				console.log('emit', eventName, ...args);
@@ -40,6 +45,14 @@ export default class RTM extends EventEmitter {
 				this.emit(eventName, { channelName, args });
 			});
 		});
+	}
+
+	async subscribePeersOnlineStatus(uids) {
+		return this.client.subscribePeersOnlineStatus(uids);
+	}
+
+	peersOnlineStatusChanged(callback) {
+		return this.client.on(PEERS_ONLINE_STATUS_CHANGED, callback);
 	}
 
 	/**
