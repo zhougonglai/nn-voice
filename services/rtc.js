@@ -57,7 +57,7 @@ export default class RTC extends EventEmitter {
 		clientEvents.forEach(eventName => {
 			this.client.on(eventName, (...args) => {
 				console.log('emit', eventName, ...args);
-				this.emit(eventName, listener);
+				this.emit(eventName, ...args);
 			});
 		});
 	}

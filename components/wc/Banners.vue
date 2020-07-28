@@ -110,7 +110,6 @@ export default {
 <style lang="scss" scoped>
 .banners {
 	height: 300px;
-	border-bottom: 1px solid gray;
 	position: relative;
 	perspective: 1000px;
 	overflow: hidden;

@@ -1,5 +1,5 @@
 <template lang="pug">
-LazyLoadView(:initFN="initUserCards" v-cloak key="userCards")
+LazyLoadView(:initFN="initCards" v-cloak key="cards")
   template(#loading)
     v-skeleton-loader.mx-auto.rounded-0(
       v-for="ske in 5"
@@ -7,7 +7,7 @@ LazyLoadView(:initFN="initUserCards" v-cloak key="userCards")
       type="list-item")
   .weui-cells
     WeCell.weui-cell_access(
-      v-for="card in userCards"
+      v-for="card in cards"
       :key="card.id")
       template(#header)
         SvgIcon(className="#iconVoicechannel")
@@ -24,12 +24,12 @@ export default {
 		LazyLoadView,
 	},
 	computed: {
-		...mapState('channel', ['userCards']),
+		...mapState('channel', ['cards']),
 	},
 	methods: {
-		...mapActions('channel', ['userCardAction']),
-		async initUserCards() {
-			return await Promise.all([this.userCardAction()]);
+		...mapActions('channel', ['cardAction']),
+		async initCards() {
+			return await Promise.all([this.cardAction()]);
 		},
 	},
 };
