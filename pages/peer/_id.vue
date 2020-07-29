@@ -1,5 +1,5 @@
 <template lang="pug">
-LazyLoadView(:initFN="init")
+LazyLoadView.h-full(:initFN="init")
 	template(#loading)
 		v-skeleton-loader.mx-auto(
 						v-for="ske in 5"

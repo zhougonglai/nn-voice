@@ -6,7 +6,6 @@
 <script>
 export default {
 	props: {
-		// () => new Promise((resolve) => setTimeout(resolve, 0)),
 		initFN: {
 			type: Function,
 			required: true,
@@ -33,9 +32,3 @@ export default {
 	},
 };
 </script>
-<style lang="scss" scoped>
-.lazy-load-view {
-	width: 100%;
-	height: 100%;
-}
-</style>

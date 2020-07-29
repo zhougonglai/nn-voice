@@ -1,13 +1,12 @@
 <template lang="pug">
-LazyLoadView(:initFN="init")
+LazyLoadView.h-screen(:initFN="init")
 	template(#loading)
 		CircleLoader
 	v-app-bar(app fixed elevate-on-scroll)
 		v-app-bar-nav-icon(@click="$router.back()")
 			v-icon arrow_back
-			//- box-icon(name='arrow-back' :color="$vuetify.theme.dark ? 'white' : 'black'")
 		v-toolbar-title(v-if="userTarget"  @click="switcher")
-			v-avatar(rounded height="32" min-width="32" width="32")
+			v-avatar( height="32" min-width="32" width="32")
 				img(:src="userTarget.avatar" :alt="`${userTarget.first_name} ${userTarget.last_name}`")
 			span.ml-2 {{userTarget.first_name}} {{userTarget.last_name}}
 			template(v-if="peersStatus && isFinite(peersStatus[user.id])")
@@ -16,7 +15,7 @@ LazyLoadView(:initFN="init")
 		v-btn(icon)
 			v-icon call
 		v-btn(icon)
-			box-icon(type='solid' name='video' :color="$vuetify.theme.dark ? 'white' : 'black'")
+			v-icon videocam
 	v-main.h-full
 		v-container.h-full.overflow-y-auto(fluid)
 			nuxt-child
@@ -24,7 +23,8 @@ LazyLoadView(:initFN="init")
 		v-input(dense :hide-details="true")
 			template(#prepend)
 				.w-10.h-10.flex.items-center.justify-center
-					box-icon(name='equalizer' :color="$vuetify.theme.dark ? 'white' : 'black'")
+					v-btn(icon)
+						v-icon keyboard_voice
 			v-textarea(
 				dense
 				filled
@@ -34,22 +34,18 @@ LazyLoadView(:initFN="init")
 				row-height="20")
 			template(#append)
 				.w-10.h-10.flex.items-center.justify-center
-					SvgIcon(className="#iconemoji")
+					v-btn(icon)
+						v-icon sentiment_satisfied_alt
 				.w-10.h-10.flex.items-center.justify-center(@click="sendMsg")
-					box-icon(name='send' type='solid' :color="$vuetify.theme.dark ? 'white' : 'black'")
+					v-btn(icon)
+						v-icon send
 </template>
 <script>
-import LazyLoadView from '@/components/wc/LazyLoadView';
-import CircleLoader from '@/components/wc/CircleLoader';
 import { mapState, mapGetters, mapMutations } from 'vuex';
 import { throttle } from 'lodash';
 
 export default {
 	layout: 'channel',
-	components: {
-		LazyLoadView,
-		CircleLoader,
-	},
 	data() {
 		return {
 			input: '',

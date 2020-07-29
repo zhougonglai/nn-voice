@@ -22,6 +22,7 @@ LazyLoadView(:initFN="initCards" v-cloak key="cards")
 				box-icon(name='send' type='solid' :color="$vuetify.theme.dark ? 'white' : 'black'")
 				template(v-if="getMessages(user.id).length")
 					WeBage.weui-badge_dot
+	LoadMore(placehold="没有更多了" line)
 </template>
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';

@@ -3,6 +3,8 @@
 body {
 	background-color: var(--weui-BG-0);
 	color: var(--weui-FG-0);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 .safe-aria {

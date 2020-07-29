@@ -33,7 +33,7 @@ export default {
 		...mapActions('user', ['userAction']),
 		async init() {
 			if (this.user) {
-				return new Promise(resolve => setTimeout(resolve, 2250));
+				return true;
 			} else {
 				return await this.userAction(1);
 			}

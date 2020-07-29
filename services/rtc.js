@@ -72,6 +72,16 @@ export default class RTC extends EventEmitter {
 	}
 
 	/* --------------------------- MediaDevice ------------------------------ */
+	async createMicrophoneAndCameraTracks() {
+		const [
+			audioTrack,
+			videoTrack,
+		] = await AgoraRTC.createMicrophoneAndCameraTracks();
+		this.localAudioTrack = audioTrack;
+		this.localVideoTrack = videoTrack;
+		return [audioTrack, videoTrack];
+	}
+
 	async createMicrophoneAudioTrack() {
 		return (this.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack());
 	}
@@ -109,9 +119,9 @@ export default class RTC extends EventEmitter {
 		AgoraRTC.onCameraChanged(callback);
 	}
 
-	async publish() {
+	async publish(tracks) {
 		return await this.client.publish(
-			compact([this.localAudioTrack, this.localVideoTrack]),
+			tracks || compact([this.localAudioTrack, this.localVideoTrack]),
 		);
 	}
 
