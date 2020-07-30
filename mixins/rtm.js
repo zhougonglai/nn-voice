@@ -42,6 +42,15 @@ export default {
 					await this.login();
 				}
 			}
+			this.$store.subscribe(this.rtmEventsHandle);
+		},
+		rtmEventsHandle({ type, payload }) {
+			const action = {
+				'user/USER': () => (payload ? this.login() : this.logout()),
+			};
+			if (type in action) {
+				action[type]();
+			}
 		},
 		peersOnlineStatusChanged(status) {
 			this.PEERS_STATUS(mapValues(status, v => v === 'ONLINE'));
@@ -50,7 +59,13 @@ export default {
 			this.MSG_UPDATE({ ...msg, pid, ...prop, sendTo: this.user.id });
 		},
 		async login() {
+			console.log('login', this.user);
 			return this.$RTM.login(this.user.id.toString());
+		},
+		async logout() {
+			if (this.$RTM.uid) {
+				await this.$RTM.logout();
+			}
 		},
 		async subscribePeersOnlineStatus(uids) {
 			return this.$RTM.subscribePeersOnlineStatus(uids);

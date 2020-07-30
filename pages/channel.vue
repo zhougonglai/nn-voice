@@ -1,5 +1,5 @@
 <template lang="pug">
-LazyLoadView(:initFN="init")
+LazyLoadView.h-full(:initFN="init")
 	template(#loading)
 		CircleLoader
 	v-app-bar(app fixed elevate-on-scroll)
@@ -22,7 +22,10 @@ LazyLoadView(:initFN="init")
 				v-list-item
 					v-list-item-title 音量
 	v-main.h-full
-		v-container.h-full.overflow-y-auto(fluid)
+		v-container.h-full.relative.overflow-y-auto(fluid)
+			.absolute.inset-0
+				#remote
+				#local
 			nuxt-child
 	v-footer.safe-aria(app fixed)
 		v-input(dense :hide-details="true")
@@ -47,6 +50,7 @@ LazyLoadView(:initFN="init")
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import RTCMixin from '@/mixins/rtc';
 
 export default {
 	layout: 'channel',
@@ -55,6 +59,7 @@ export default {
 			input: '',
 		};
 	},
+	mixins: [RTCMixin],
 	computed: {
 		...mapGetters('channel', ['getCard']),
 		userTarget() {
@@ -63,9 +68,25 @@ export default {
 	},
 	methods: {
 		async init() {
-			return true;
+			return this.initRtcClient();
 		},
 		sendMsg() {},
 	},
 };
 </script>
+<style lang="scss" scoped>
+#local {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+	width: 25vw;
+	height: 40vw;
+	border-radius: 4px;
+	overflow: hidden;
+	box-shadow: 0 2px 3px var(--weui-FG-3);
+}
+
+#remote {
+	height: 25vh;
+}
+</style>

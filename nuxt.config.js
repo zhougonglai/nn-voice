@@ -1,6 +1,13 @@
 import colors from 'vuetify/es5/util/colors';
 // require('dotenv').config();
 
+const productionScript = [
+	{
+		hid: 'vconsole',
+		src: 'http://wechatfe.github.io/vconsole/lib/vconsole.min.js?v=3.3.0',
+	},
+];
+
 export default {
 	mode: 'universal',
 	router: {
@@ -14,7 +21,7 @@ export default {
 			{
 				name: 'viewport',
 				content:
-					'width=device-width, minimum-scale=1, initial-scale=1, user-scalable=no',
+					'width=device-width, minimum-scale=1, maximum-scale=1, initial-scale=1, user-scalable=no',
 			},
 			{
 				hid: 'description',
@@ -46,6 +53,7 @@ export default {
 				hid: 'weuijs',
 				src: 'https://res.wx.qq.com/open/libs/weuijs/1.2.1/weui.min.js',
 			},
+			...(process.env.NODE_ENV === 'production' ? [] : productionScript),
 		],
 	},
 	loading: { color: '#fff' },

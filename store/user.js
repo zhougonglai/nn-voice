@@ -1,6 +1,9 @@
 import { uniqBy } from 'lodash';
 
 export const state = () => ({
+	status: {
+		userLoging: false,
+	},
 	user: '',
 	users: [],
 });
@@ -105,8 +108,10 @@ export const getters = {
 export const actions = {
 	async userAction({ commit }, id) {
 		// console.log(process.env.API);
+		commit('USER_STATUS', { key: 'userLoging', status: true });
 		const user = data.find(user => user.id == id);
 		commit('USER', user);
+		commit('USER_STATUS', { key: 'userLoging', status: false });
 		return user;
 	},
 	async usersAction({ commit, state }, page) {
@@ -116,6 +121,9 @@ export const actions = {
 };
 
 export const mutations = {
+	USER_STATUS(state, { key, status }) {
+		state.status[key] = status;
+	},
 	USER(state, user) {
 		state.user = user;
 	},

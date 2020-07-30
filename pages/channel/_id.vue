@@ -1,5 +1,5 @@
 <template lang="pug">
-LazyLoadView.h-full(:initFN="init")
+LazyLoadView.h-full.z-10(:initFN="init")
   template(#loading)
     CircleLoader
   .flex-1 {{$route.params.id}}

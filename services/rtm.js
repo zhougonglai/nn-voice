@@ -70,6 +70,7 @@ export default class RTM extends EventEmitter {
 	}
 
 	async logout() {
+		this.uid = null;
 		return this.client.logout();
 	}
 

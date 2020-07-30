@@ -38,7 +38,19 @@ export default {
 			console.log('switchUser', user);
 			window.weui.confirm(
 				`切换用户: ${user.first_name} ${user.last_name}`,
-				() => this.USER(user),
+				async () => {
+					const loading = weui.loading('稍后');
+					await this.USER();
+					this.$nextTick(() => {
+						new Promise(resolve => {
+							setTimeout(async () => {
+								await this.USER(user);
+								loading.hide();
+								resolve();
+							}, 2000);
+						});
+					});
+				},
 			);
 		},
 	},

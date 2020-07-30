@@ -32,6 +32,9 @@ export default {
 	methods: {
 		...mapActions('user', ['userAction']),
 		async init() {
+			if (window.VConsole) {
+				window.vConsole = new window.VConsole();
+			}
 			if (this.user) {
 				return true;
 			} else {
