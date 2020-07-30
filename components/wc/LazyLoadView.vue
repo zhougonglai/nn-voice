@@ -17,12 +17,12 @@ export default {
 		};
 	},
 	async mounted() {
-		await this.initFN();
-		this.initSlot();
+		await this.initFN().then(this.initSlot);
 	},
 	methods: {
-		initSlot() {
+		initSlot(...args) {
 			this.loading = true;
+			this.$emit('rendered', { ...args });
 		},
 		async reloading(callback) {
 			this.loading = false;

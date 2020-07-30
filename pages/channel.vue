@@ -1,5 +1,5 @@
 <template lang="pug">
-LazyLoadView.h-full(:initFN="init")
+LazyLoadView.h-full(:initFN="init" @rendered="joinRoom")
 	template(#loading)
 		CircleLoader
 	v-app-bar(app fixed elevate-on-scroll)
@@ -66,9 +66,15 @@ export default {
 			return this.getCard(this.$route.params.id);
 		},
 	},
+	beforeDestroy() {
+		this.$RTC.leave();
+	},
 	methods: {
 		async init() {
 			return this.initRtcClient();
+		},
+		joinRoom(...args) {
+			this.joinByRTC();
 		},
 		sendMsg() {},
 	},
@@ -88,5 +94,10 @@ export default {
 
 #remote {
 	height: 25vh;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-template-rows: repeat(2, 1fr);
+	grid-column-gap: 4px;
+	grid-row-gap: 4px;
 }
 </style>

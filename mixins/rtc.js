@@ -21,10 +21,12 @@ export default {
 				action[type]();
 			}
 		},
-		async login() {
-			const client = this.$RTC.createClient(this.user.id);
+		login() {
+			this.$RTC.createClient(this.user.id);
 			this.$RTC.subscribeClientEvents();
-			await client.join({ roomId: this.$route.params.id });
+		},
+		async joinByRTC() {
+			await this.$RTC.join(this.$route.params.id);
 			const localSteam = this.$RTC.createStream({
 				userId: this.user.id,
 				audio: true,
@@ -33,7 +35,7 @@ export default {
 			await localSteam.initialize().then(() => {
 				localSteam.play('local');
 			});
-			await client.publish(localSteam);
+			await this.$RTC.client.publish(localSteam);
 			this.$RTC.subscribe(this.RTCsubscribe);
 			this.$RTC.subscribed(this.RTCsubscribed);
 		},

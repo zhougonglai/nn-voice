@@ -56,6 +56,10 @@ export default class RTC extends EventEmitter {
 		return this.client.join({ roomId });
 	}
 
+	async leave() {
+		return this.client.leave();
+	}
+
 	createStream(config) {
 		return (this.localStream = TRTC.createStream(config));
 	}
