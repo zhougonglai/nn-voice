@@ -1,4 +1,4 @@
-import RTC from '~/services/rtc';
+import RTC from '~/services/trtc';
 import RTM from '~/services/rtm';
 import Vue from 'vue';
 

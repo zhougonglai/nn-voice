@@ -19,6 +19,7 @@
 		"lodash": "^4.17.19",
 		"nuxt": "^2.0.0",
 		"secure-ls": "^1.2.6",
+		"trtc-js-sdk": "^4.6.0",
 		"vee-validate": "^3.3.7",
 		"vuex-persistedstate": "^3.0.1"
 	},

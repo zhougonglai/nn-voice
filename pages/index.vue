@@ -1,6 +1,6 @@
 <template lang="pug">
 #home.h-full.overflow-y-auto
-	Banners(:data="banners")
+	//- Banners(:data="banners")
 	WeNavbar(v-model="current")
 		WeNavItem(name="peer") 好友
 		WeNavItem(name="channel") 频道

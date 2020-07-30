@@ -10,10 +10,10 @@ LazyLocadView(:initFN="init" v-cloak)
 						nuxt
 				WeTabItem(label="主页" name="index")
 					template(#icon)
-						i.bx.weui-tabbar__icon(:class="[ active === 'index' ? 'bxs-home' : 'bx-home']")
+						i.material-icons.weui-tabbar__icon home
 				WeTabItem(label='更多社区' name="more")
 					template(#icon)
-						i.bx.weui-tabbar__icon(:class="[ active === 'more' ? 'bxs-grid-alt' : 'bx-grid-alt' ]")
+						i.material-icons.weui-tabbar__icon apps
 				WeTabItem(:label="`${user.first_name} ${user.last_name}`" v-if="user" :icon="user.avatar" name="me")
 				WeTabItem(label="我的" v-else name="me" icon="https://dfs01.nn.com/group1/M00/00/19/rB8AIF8RSeyACRJoAAAKmXbq74c060.png")
 					//- template(#icon)
@@ -57,11 +57,7 @@ export default {
 	methods: {
 		...mapActions('user', ['userAction']),
 		async init() {
-			if (this.user) {
-				return true;
-			} else {
-				return this.userAction(1);
-			}
+			return Promise.resolve();
 		},
 		tabChange(name) {
 			this.$router.push(this.tabs[name]);

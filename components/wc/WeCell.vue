@@ -1,10 +1,10 @@
 <template lang="pug">
 .weui-cell(v-bind="$attrs" v-on="listeners")
-  .weui-cell__hd(v-if="$slots.header" @click.stop.prevent="preClick")
+  .weui-cell__hd(v-if="$slots.header")
     slot(name="header")
   .weui-cell__bd
     slot
-  .weui-cell__ft(v-if="$slots.footer" @click.stop.prevent="sufClick")
+  .weui-cell__ft(v-if="$slots.footer")
     slot(name="footer")
 </template>
 <script>
@@ -20,12 +20,6 @@ export default {
 	methods: {
 		handleClick(event) {
 			this.$emit('click', event);
-		},
-		preClick(event) {
-			this.$emit('preClick', event);
-		},
-		sufClick(event) {
-			this.$emit('sufClick', event);
 		},
 	},
 };

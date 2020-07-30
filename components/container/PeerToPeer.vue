@@ -19,7 +19,7 @@ LazyLoadView(:initFN="initCards" v-cloak key="cards")
 			.weui-media-box__desc(v-if="getMessages(user.id).length") {{getMessages(user.id)[getMessages(user.id).length - 1].text}}
 			.weui-media-box__desc(v-else) {{user.email}}
 			template(#footer)
-				box-icon(name='send' type='solid' :color="$vuetify.theme.dark ? 'white' : 'black'")
+				v-icon send
 				template(v-if="getMessages(user.id).length")
 					WeBage.weui-badge_dot
 	LoadMore(placehold="没有更多了" line)
@@ -42,6 +42,7 @@ export default {
 		...mapActions('rtm', ['peersStatusAction']),
 		async initCards() {
 			await this.usersAction(1).catch(e => {});
+			await this.usersAction(2).catch(e => {});
 			this.messageFromPeer();
 			return true;
 		},

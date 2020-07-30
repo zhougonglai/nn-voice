@@ -30,25 +30,17 @@ export default {
 				href: 'https://res.wx.qq.com/open/libs/weui/2.4.0/weui.min.css',
 			},
 			{
-				hid: 'boxicons.css',
-				rel: 'stylesheet',
-				href:
-					'https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css',
-			},
-			{
 				hid: 'mdi',
 				rel: 'stylesheet',
-				href: 'https://fonts.googleapis.com/css?family=Material+Icons',
+				// href: 'https://fonts.googleapis.com/css?family=Material+Icons',
+				href:
+					'https://cdn.bootcdn.net/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css',
 			},
 		],
 		script: [
 			{
 				hid: 'iconfont',
 				src: 'https://at.alicdn.com/t/font_1825109_95q9b1tdfat.js',
-			},
-			{
-				hid: 'boxicons.js',
-				src: 'https://unpkg.com/boxicons@latest/dist/boxicons.js',
 			},
 			{
 				hid: 'weuijs',
@@ -59,6 +51,7 @@ export default {
 	loading: { color: '#fff' },
 	css: ['~/styles/index.scss'],
 	server: {
+		port: 8000,
 		host: '0.0.0.0',
 	},
 	plugins: [
