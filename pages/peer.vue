@@ -35,7 +35,7 @@ LazyLoadView.h-screen(:initFN="init")
 			template(#append)
 				.w-10.h-10.flex.items-center.justify-center
 					v-btn(icon)
-						v-icon sentiment_satisfied_alt
+						v-icon mood
 				.w-10.h-10.flex.items-center.justify-center(@click="sendMsg")
 					v-btn(icon)
 						v-icon send

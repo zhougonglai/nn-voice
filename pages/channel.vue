@@ -25,7 +25,7 @@ LazyLoadView.h-full(:initFN="init" @rendered="joinRoom")
 		v-container.h-full.relative.overflow-y-auto(fluid)
 			.absolute.inset-0
 				#remote
-				#local
+				#local(:class="{ good: quality.local && quality.local.uplinkNetworkQuality < 3,normal: quality.local && quality.local.uplinkNetworkQuality === 3,bad:  quality.local && quality.local.uplinkNetworkQuality >= 3}")
 			nuxt-child
 	v-footer.safe-aria(app fixed)
 		v-input(dense :hide-details="true")
@@ -33,6 +33,9 @@ LazyLoadView.h-full(:initFN="init" @rendered="joinRoom")
 				.w-10.h-10.flex.items-center.justify-center
 					v-btn(icon)
 						v-icon keyboard_voice
+				.w-10.h-10.flex.items-center.justify-center
+					v-btn(icon)
+						v-icon mood
 			v-textarea(
 				dense
 				filled
@@ -40,13 +43,10 @@ LazyLoadView.h-full(:initFN="init" @rendered="joinRoom")
 				v-model.trim="input"
 				rows="1"
 				row-height="20")
-			template(#append)
-				.w-10.h-10.flex.items-center.justify-center
-					v-btn(icon)
-						v-icon sentiment_satisfied_alt
-				.w-10.h-10.flex.items-center.justify-center(@click="sendMsg")
-					v-btn(icon)
-						v-icon send
+				template(#append)
+					.w-10.h-10.flex.items-center.justify-center(@click="sendMsg")
+						v-btn(icon)
+							v-icon send
 </template>
 <script>
 import { mapGetters } from 'vuex';
@@ -57,6 +57,9 @@ export default {
 	data() {
 		return {
 			input: '',
+			quality: {
+				local: null,
+			},
 		};
 	},
 	mixins: [RTCMixin],
@@ -73,8 +76,20 @@ export default {
 		async init() {
 			return this.initRtcClient();
 		},
-		joinRoom(...args) {
-			this.joinByRTC();
+		async joinRoom(...args) {
+			await this.joinByRTC();
+			this.$RTC.on('network-quality', this.networkQuality);
+			this.$RTC.subscribe(this.RTCsubscribe);
+			this.$RTC.subscribed(this.RTCsubscribed);
+		},
+		networkQuality(localQuality) {
+			this.quality.local = localQuality;
+		},
+		RTCsubscribe(event) {
+			console.log('RTCsubscribe', event);
+		},
+		RTCsubscribed(event) {
+			console.log('RTCsubscribed', event);
 		},
 		sendMsg() {},
 	},
@@ -90,6 +105,9 @@ export default {
 	border-radius: 4px;
 	overflow: hidden;
 	box-shadow: 0 2px 3px var(--weui-FG-3);
+	&.good {
+		border: 1px solid var(--weui-GREEN);
+	}
 }
 
 #remote {
@@ -99,5 +117,6 @@ export default {
 	grid-template-rows: repeat(2, 1fr);
 	grid-column-gap: 4px;
 	grid-row-gap: 4px;
+	background-color: var(--weui-FG-3);
 }
 </style>

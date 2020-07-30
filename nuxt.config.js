@@ -4,7 +4,7 @@ import colors from 'vuetify/es5/util/colors';
 const productionScript = [
 	{
 		hid: 'vconsole',
-		src: 'http://wechatfe.github.io/vconsole/lib/vconsole.min.js?v=3.3.0',
+		src: 'https://cdn.bootcdn.net/ajax/libs/vConsole/3.3.4/vconsole.min.js',
 	},
 ];
 
@@ -53,7 +53,9 @@ export default {
 				hid: 'weuijs',
 				src: 'https://res.wx.qq.com/open/libs/weuijs/1.2.1/weui.min.js',
 			},
-			...(process.env.NODE_ENV === 'production' ? [] : productionScript),
+			...(process.env.NODE_ENV === 'production'
+				? productionScript
+				: productionScript),
 		],
 	},
 	loading: { color: '#fff' },

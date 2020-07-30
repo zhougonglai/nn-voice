@@ -3,8 +3,8 @@ LazyLocadView(:initFN="init" v-cloak)
 	template(#loading)
 		PageHold
 	v-app
-		v-main
-			WeTabs.safe-aria(v-model="active" @change="tabChange")
+		.absolute.inset-0.safe-aria
+			WeTabs(v-model="active" @change="tabChange")
 				template(#active)
 					keep-alive(:include="['index', 'more', 'me']")
 						nuxt
@@ -16,8 +16,6 @@ LazyLocadView(:initFN="init" v-cloak)
 						i.material-icons.weui-tabbar__icon apps
 				WeTabItem(:label="`${user.first_name} ${user.last_name}`" v-if="user" :icon="user.avatar" name="me")
 				WeTabItem(label="我的" v-else name="me" icon="https://dfs01.nn.com/group1/M00/00/19/rB8AIF8RSeyACRJoAAAKmXbq74c060.png")
-					//- template(#icon)
-					//- 	i.bx.weui-tabbar__icon(:class="[ active === 'me' ? 'bxs-user' : 'bx-user' ]")
 </template>
 <script>
 import LazyLocadView from '@/components/wc/LazyLoadView';
@@ -57,6 +55,7 @@ export default {
 	methods: {
 		...mapActions('user', ['userAction']),
 		async init() {
+			window.vConsole = new window.VConsole();
 			return Promise.resolve();
 		},
 		tabChange(name) {

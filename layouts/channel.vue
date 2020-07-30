@@ -1,5 +1,5 @@
 <template lang="pug">
-LazyLocadView(:initFN="init" v-cloak)
+LazyLocadView.absolute.inset-0(:initFN="init" v-cloak)
 	template(#loading)
 		PageHold
 	v-app
@@ -32,9 +32,7 @@ export default {
 	methods: {
 		...mapActions('user', ['userAction']),
 		async init() {
-			if (window.VConsole) {
-				window.vConsole = new window.VConsole();
-			}
+			window.vConsole = new window.VConsole();
 			if (this.user) {
 				return true;
 			} else {

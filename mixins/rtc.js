@@ -32,12 +32,30 @@ export default {
 				audio: true,
 				video: true,
 			});
-			await localSteam.initialize().then(() => {
-				localSteam.play('local');
-			});
-			await this.$RTC.client.publish(localSteam);
-			this.$RTC.subscribe(this.RTCsubscribe);
-			this.$RTC.subscribed(this.RTCsubscribed);
+			await localSteam
+				.initialize()
+				.then(() => {
+					localSteam.play('local');
+				})
+				.catch(error => {
+					switch (error.name) {
+						case 'NotFoundError':
+							window.weui.alert('没找到可用设备');
+							break;
+						case 'NotAllowedError':
+							window.weui.alert('访问摄像头/麦克风被拒绝');
+							break;
+						case 'NotReadableError':
+							window.weui.alert(
+								'暂时无法访问摄像头/麦克风，请确保当前没有其他应用请求访问摄像头/麦克风，并重试',
+							);
+							break;
+						case 'AbortError':
+							window.weui.alert('由于某些未知原因导致设备无法被使用');
+							break;
+					}
+				});
+			return await this.$RTC.client.publish(localSteam);
 		},
 		RTCsubscribe(event) {
 			console.log('RTCsubscribe', event);
