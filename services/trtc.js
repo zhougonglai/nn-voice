@@ -164,4 +164,12 @@ export default class RTC extends EventEmitter {
 	streamRemove(callback) {
 		this.client.on(STREAM_REMOVED, callback);
 	}
+
+	peerJoin(callback) {
+		this.client.on(PEER_JOIN, callback);
+	}
+
+	peerLeave(callback) {
+		this.client.on(PEER_LEAVE, callback);
+	}
 }

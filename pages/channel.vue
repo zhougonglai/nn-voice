@@ -25,6 +25,7 @@ LazyLoadView.h-full(:initFN="init" @rendered="joinRoom")
 		v-container.h-full.relative.overflow-y-auto(fluid)
 			.absolute.inset-0
 				#remote(ref="remote")
+					.remote(v-for="remote in remotes" :key="remote.id" :id="remote.id")
 				#local(
 					ref="local"
 					:class="[{good: quality.local && quality.local.uplinkNetworkQuality < 3,normal: quality.local && quality.local.uplinkNetworkQuality === 3,bad:  quality.local && quality.local.uplinkNetworkQuality >= 3}]")
@@ -63,6 +64,7 @@ export default {
 				local: null,
 			},
 			remotes: [],
+			peers: [],
 		};
 	},
 	mixins: [RTCMixin],
@@ -87,6 +89,8 @@ export default {
 			this.$RTC.subscribed(this.RTCsubscribed);
 			this.$RTC.streamUpdate(this.RTCstreamUpdate);
 			this.$RTC.streamRemove(this.RTCstreamRemove);
+			this.$RTC.peerJoin(this.RTCPeerJoin);
+			this.$RTC.peerLeave(this.RTCPeerLeave);
 			const localSteam = this.$RTC.createStream({
 				userId: this.user.id,
 				audio: true,
@@ -129,28 +133,44 @@ export default {
 			this.$RTC.client.subscribe(event.stream);
 		},
 		RTCsubscribed(event) {
-			console.log('RTCsubscribed', event, this.$refs.remote);
+			console.log('RTCsubscribed', event);
+			const remoteStream = event.stream;
+			remoteStream.on('player-state-changed', this.playerStateChanged);
 			const remoteId = event.stream.getId();
-			const div = document.createElement('div');
-			div.id = remoteId;
 			this.remotes.push({
 				id: remoteId,
 				stream: event.stream,
-				el: div,
 			});
-			const remoteEl = document.getElementById('remote');
-			event.stream.play(div, { objectFit: 'contain' });
-			remoteEl.appendChild(div);
+			this.$nextTick(() => {
+				event.stream.play(remoteId, { objectFit: 'contain' });
+			});
+		},
+		playerStateChanged(event) {
+			const { state } = event;
+			console.log('state change', state);
 		},
 		RTCstreamUpdate(event) {
-			console.log('RTCstreamUpdate', event, this.$refs.remote);
+			console.log('RTCstreamUpdate', event);
 		},
 		RTCstreamRemove(event) {
 			const remoteId = event.stream.getId();
-			const remote = this.remotes.find(remote => remote.id === remoteId);
-			const remoteEl = document.getElementById('remote');
-			remoteEl.remove(remote);
-			this.remotes.splice(this.remotes.indexOf(remote), 1);
+			const index = this.remotes.findIndex(remote => remote.id === remoteId);
+			this.remotes.splice(index, 1);
+		},
+		RTCPeerJoin(event) {
+			const userId = event.userId;
+			console.log('RTCPeerJoin', userId);
+			this.peers.push({
+				id: userId,
+				event,
+			});
+		},
+		RTCPeerLeave(event) {
+			const userId = event.userId;
+			this.peers.splice(
+				this.peers.findIndex(peer => peer.id === userId),
+				1,
+			);
 		},
 		sendMsg() {},
 	},
