@@ -6,7 +6,7 @@ LazyLoadView(:initFN="initCards" v-cloak key="cards")
       :key="ske"
       type="list-item")
   .grid.grid-cols-2.gap-2.pa-2
-    n-link.rounded.card.flex.flex-col(v-for="card in cards" :key="card.id" :to="`/channel/${card.serverId}`")
+    .rounded.card.flex.flex-col(v-for="card in cards" :key="card.id" @click="navigatorToChannel(card)")
       .card-header
         img(:src="card.bigImgUrl")
       .card-avatar
@@ -25,12 +25,20 @@ export default {
 		LazyLoadView,
 	},
 	computed: {
+		...mapState('user', ['user']),
 		...mapState('channel', ['cards']),
 	},
 	methods: {
 		...mapActions('channel', ['cardAction']),
 		async initCards() {
 			return await Promise.all([this.cardAction()]);
+		},
+		navigatorToChannel(card) {
+			if (this.user) {
+				this.$router.push(`/channel/${card.serverId}`);
+			} else {
+				window.weui.alert('请先去登录');
+			}
 		},
 	},
 };

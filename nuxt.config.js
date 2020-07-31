@@ -53,9 +53,7 @@ export default {
 				hid: 'weuijs',
 				src: 'https://res.wx.qq.com/open/libs/weuijs/1.2.1/weui.min.js',
 			},
-			...(process.env.NODE_ENV === 'production'
-				? productionScript
-				: productionScript),
+			...(process.env.NODE_ENV === 'production' ? productionScript : []),
 		],
 	},
 	loading: { color: '#fff' },
