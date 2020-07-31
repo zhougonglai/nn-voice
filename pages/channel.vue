@@ -150,7 +150,6 @@ export default {
 			);
 			this.$nextTick(() => {
 				const el = document.getElementById(remoteId);
-				// console.log(el, remoteId);
 				event.stream.play(el, { objectFit: 'cover' });
 			});
 		},

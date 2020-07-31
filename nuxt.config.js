@@ -82,7 +82,6 @@ export default {
 	axios: {
 		proxy: true,
 	},
-	env: {},
 	dotenv: {
 		filename: `.env.${process.env.NODE_ENV}`,
 	},

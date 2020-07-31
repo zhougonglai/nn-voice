@@ -1,10 +1,9 @@
 import LibGenerateTestUserSig from './lib-generate-test-usersig.min.js';
 
 export const genUserSig = uid => {
-	const SDKAPPID = 1400406791;
+	const SDKAPPID = +process.env.SDKAPPID;
 	const EXPIRETIME = 604800;
-	const SECRETKEY =
-		'08f48a95bbad9def0d4795433e697bf43b9623ef3b6175af30ee967f38652af7';
+	const SECRETKEY = process.env.SECRETKEY;
 	const generator = new LibGenerateTestUserSig(SDKAPPID, SECRETKEY, EXPIRETIME);
 	const userSig = generator.genTestUserSig(uid.toString());
 	return {
