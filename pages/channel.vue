@@ -74,7 +74,6 @@ export default {
 	},
 	async beforeDestroy() {
 		await this.$RTC.unpublish();
-		this.$RTC.unsubscribeClient();
 		this.$RTC.close();
 		this.$RTC.leave();
 	},
