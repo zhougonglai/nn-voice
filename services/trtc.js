@@ -71,11 +71,20 @@ export default class RTC extends EventEmitter {
 	}
 
 	async join(roomId) {
-		return this.client.join({ roomId });
+		return this.client
+			.join({ roomId })
+			.then(() => (this.joined = true))
+			.catch(() => (this.joined = false));
 	}
 
 	async leave() {
 		return this.client.leave();
+	}
+
+	close() {
+		this.localStream.stop();
+		this.localStream.close();
+		this.localStream = null;
 	}
 
 	createStream(config) {
@@ -83,7 +92,10 @@ export default class RTC extends EventEmitter {
 	}
 
 	async publish(stream) {
-		return this.client.publish(stream || this.localStream);
+		return this.client
+			.publish(stream || this.localStream)
+			.then(() => (this.published = true))
+			.catch(() => (this.published = false));
 	}
 
 	async unpublish(stream) {
