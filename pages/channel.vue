@@ -145,17 +145,6 @@ export default {
 		},
 		RTCstreamUpdate(event) {
 			console.log('RTCstreamUpdate', event, this.$refs.remote);
-			const remoteId = event.stream.getId();
-			const div = document.createElement('div');
-			div.id = remoteId;
-			this.remotes.push({
-				id: remoteId,
-				stream: event.stream,
-				el: div,
-			});
-			const remoteEl = document.getElementById('remote');
-			event.stream.play(div, { objectFit: 'contain' });
-			remoteEl.appendChild(div);
 		},
 		RTCstreamRemove(event) {
 			const remoteId = event.stream.getId();
