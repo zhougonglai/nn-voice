@@ -7,8 +7,9 @@ const userSig = [
 	'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwoZQweKU7MSCgswUJStDEwMDEwMzc0tDiExqRUFmUSpQ3NTU1MjAwAAiWpKZCxazNDOwtDCEiRZnpgPNtAgMMvAL1zY1ca8wzSor83b1s8xKLQ2LcM8JcPJKd8yLqMgrCfZKCsmo8rRVqgUA*QgvnQ__',
 	'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zIhwlDB4pTsxIKCzBQlK0MTAwMTAzNzS0OITGpFQWZRKlDc1NTUyMDAACJakpkLFrM0M7A0NzQzhpqSmQ40M8jD0tjFwjOrMtgpKEbfJzww2LDc28vUzN3HJLk4MiurzCMzNDLKKcXFuyrbVqkWAB55L1w_',
 	'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwsZQweKU7MSCgswUJStDEwMDEwMzc0tDiExqRUFmUSpQ3NTU1MjAwAAiWpKZCxazNDOwtDA0NIaakpkONLPAICI7x8M8N9g-2aAgPCQ53CjTqdQ81NcnxN-Sw8XMrzAgKtCy1NuwsCTSVqkWAAPxLzM_',
-	'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwiZQweKU7MSCgswUJStDEwMDEwMzc0tDiExqRUFmUSpQ3NTU1MjAwAAiWpKZCxazNDOwtDA0MoKakpkONNPC1N2szLEquzTf0NfbJ8ws3DTVr9Arz80k1CAlK9Hf2bUsLM8owzzS39LXVqkWAPuvLuk_',
+	'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwiZQweKU7MSCgswUJStDEwMDEwMzc0tDiExqRUFmUSpQ3NTU1MjAwAAiWpKZCxazNDM0MzUxM4OakpkONDM0tDAt28goqdzAMSjJy1Db29QxK0bfJSqt1DJG36c4Rr*kzL3Y2DuvysTMUdvXVqkWAIfaL5w_',
 	'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwqZQweKU7MSCgswUJStDEwMDEwMzc0tDiExqRUFmUSpQ3NTU1MjAwAAiWpKZCxazNDOwtDA0hqotzkwHmpkfHhjol*4b6ehU7l2Ub5blneXmFZ5i7FjpXhZYZJYVYFpokplWGVia5mJhq1QLABTZL*k_',
+	'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwmZQweKU7MSCgswUJStDEwMDEwMzc0tDiExqRUFmUSpQ3NTU1MjAwAAiWpKZCxazNDM0MzW2gKotzkwHmlmUFKNvUuibnuRimOaZWuySE*idWpXu72EUo1-hnlJhFumSmlQaEOYRnpsT5mirVAsAdRswlw__',
 ];
 
 /**
@@ -105,12 +106,12 @@ export default class RTC extends EventEmitter {
 			UNMUTE_AUDIO,
 			UNMUTE_VIDEO,
 			CLIENT_BANNED,
-			NETWORK_QUALITY,
+			// NETWORK_QUALITY,
 			ERROR,
 		];
 		events.forEach(eventName => {
 			this.client.on(eventName, (...args) => {
-				// console.log('RTCemit', eventName, ...args);
+				console.log('RTCemit', eventName, ...args);
 				this.emit(eventName, ...args);
 			});
 		});
@@ -127,14 +128,14 @@ export default class RTC extends EventEmitter {
 	}
 
 	subscribe(callback) {
-		this.client.on(TRTC.STREAM_ADDED, callback);
+		this.client.on(STREAM_ADDED, callback);
 		// console.log('远端流增加: ' + event.stream.getId());
 		// this.client.subscribe(event.stream);
 		// callback(event);
 	}
 
 	subscribed(callback) {
-		this.client.on(TRTC.STREAM_SUBSCRIBED, callback);
+		this.client.on(STREAM_SUBSCRIBED, callback);
 		// const remoteId = 'remote_stream-' + event.stream.getId();
 		// console.log('远端流订阅成功：' + remoteId);
 		// event.stream.play('remote_stream-' + event.stream.getId());

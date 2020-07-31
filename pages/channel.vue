@@ -24,8 +24,10 @@ LazyLoadView.h-full(:initFN="init" @rendered="joinRoom")
 	v-main.h-full
 		v-container.h-full.relative.overflow-y-auto(fluid)
 			.absolute.inset-0
-				#remote
-				#local(:class="{ good: quality.local && quality.local.uplinkNetworkQuality < 3,normal: quality.local && quality.local.uplinkNetworkQuality === 3,bad:  quality.local && quality.local.uplinkNetworkQuality >= 3}")
+				#remote(ref="remote")
+				#local(
+					ref="local"
+					:class="[{good: quality.local && quality.local.uplinkNetworkQuality < 3,normal: quality.local && quality.local.uplinkNetworkQuality === 3,bad:  quality.local && quality.local.uplinkNetworkQuality >= 3}]")
 			nuxt-child
 	v-footer.safe-aria(app fixed)
 		v-input(dense :hide-details="true")
@@ -60,6 +62,7 @@ export default {
 			quality: {
 				local: null,
 			},
+			remotes: [],
 		};
 	},
 	mixins: [RTCMixin],
@@ -87,9 +90,19 @@ export default {
 		},
 		RTCsubscribe(event) {
 			console.log('RTCsubscribe', event);
+			this.$RTC.client.subscribe(event.stream);
 		},
 		RTCsubscribed(event) {
-			console.log('RTCsubscribed', event);
+			console.log('RTCsubscribed', event, this.$refs.remote);
+			const remoteId = event.stream.getId();
+			const div = document.createElement('div');
+			div.id = remoteId;
+			this.remotes.push({
+				id: remoteId,
+				el: div,
+			});
+			this.$refs.remote.appendChild(div);
+			event.stream.play(div);
 		},
 		sendMsg() {},
 	},
