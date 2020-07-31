@@ -24,7 +24,7 @@ export default {
 		},
 		login() {
 			this.$RTC.createClient(this.user.id);
-			this.$RTC.subscribeClientEvents();
+			// this.$RTC.subscribeClientEvents();
 		},
 		RTCsubscribe(event) {
 			console.log('RTCsubscribe', event);

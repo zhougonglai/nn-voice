@@ -54,6 +54,7 @@ LazyLoadView.h-full(:initFN="init" @rendered="joinRoom")
 <script>
 import { mapGetters } from 'vuex';
 import RTCMixin from '@/mixins/rtc';
+import { unionBy } from 'lodash';
 
 export default {
 	layout: 'channel',
@@ -138,10 +139,15 @@ export default {
 			const remoteStream = event.stream;
 			remoteStream.on('player-state-changed', this.playerStateChanged);
 			const remoteId = event.stream.getId();
-			this.remotes.push({
-				id: remoteId,
-				stream: event.stream,
-			});
+			this.remotes = unionBy(
+				this.remotes.concat([
+					{
+						id: remoteId,
+						stream: event.stream,
+					},
+				]),
+				'id',
+			);
 			this.$nextTick(() => {
 				event.stream.play(remoteId, { objectFit: 'contain' });
 			});
