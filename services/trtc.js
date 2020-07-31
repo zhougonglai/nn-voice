@@ -110,7 +110,7 @@ export default class RTC extends EventEmitter {
 		];
 		events.forEach(eventName => {
 			this.client.on(eventName, (...args) => {
-				console.log('RTCemit', eventName, ...args);
+				// console.log('RTCemit', eventName, ...args);
 				this.emit(eventName, ...args);
 			});
 		});
@@ -118,7 +118,7 @@ export default class RTC extends EventEmitter {
 
 	subscribeSteamEvents() {
 		const events = [PLAYER_STATE_CHANGED, SCREEN_SHARING_STOPPED];
-		event.forEach(eventName => {
+		events.forEach(eventName => {
 			this.localStream.on(eventName, (...args) => {
 				console.log('streamEvents emit', eventName, ...args);
 				this.emit(eventName, ...args);

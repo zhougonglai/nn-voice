@@ -105,8 +105,18 @@ export default {
 	border-radius: 4px;
 	overflow: hidden;
 	box-shadow: 0 2px 3px var(--weui-FG-3);
+	transform: box-shadow 2s linear;
 	&.good {
 		border: 1px solid var(--weui-GREEN);
+		box-shadow: 0 0px 1px 1px var(--weui-GREEN);
+	}
+	&.normal {
+		border: 1px solid var(--weui-YELLOW);
+		box-shadow: 0 0px 1px 1px var(--weui-YELLOW);
+	}
+	&.bad {
+		border: 1px solid var(--weui-RED);
+		box-shadow: 0 0px 1px 1px var(--weui-YELLOW);
 	}
 }
 
