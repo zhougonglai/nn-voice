@@ -74,6 +74,7 @@ export default {
 	},
 	async beforeDestroy() {
 		await this.$RTC.unpublish();
+		this.$RTC.unsubscribeClient();
 		this.$RTC.leave();
 	},
 	methods: {
@@ -82,6 +83,10 @@ export default {
 		},
 		async joinRoom(...args) {
 			await this.$RTC.join(this.$route.params.id);
+			this.$RTC.subscribe(this.RTCsubscribe);
+			this.$RTC.subscribed(this.RTCsubscribed);
+			this.$RTC.streamUpdate(this.RTCstreamUpdate);
+			this.$RTC.streamRemove(this.RTCstreamRemove);
 			const localSteam = this.$RTC.createStream({
 				userId: this.user.id,
 				audio: true,
@@ -115,8 +120,6 @@ export default {
 			console.log('state', states);
 			await this.$RTC.client.publish(localSteam);
 			this.$RTC.on('network-quality', this.networkQuality);
-			this.$RTC.subscribe(this.RTCsubscribe);
-			this.$RTC.subscribed(this.RTCsubscribed);
 		},
 		networkQuality(localQuality) {
 			this.quality.local = localQuality;
@@ -135,8 +138,30 @@ export default {
 				stream: event.stream,
 				el: div,
 			});
-			this.$refs.remote.appendChild(div);
+			const remoteEl = document.getElementById('remote');
 			event.stream.play(div, { objectFit: 'contain' });
+			remoteEl.appendChild(div);
+		},
+		RTCstreamUpdate(event) {
+			console.log('RTCstreamUpdate', event, this.$refs.remote);
+			const remoteId = event.stream.getId();
+			const div = document.createElement('div');
+			div.id = remoteId;
+			this.remotes.push({
+				id: remoteId,
+				stream: event.stream,
+				el: div,
+			});
+			const remoteEl = document.getElementById('remote');
+			event.stream.play(div, { objectFit: 'contain' });
+			remoteEl.appendChild(div);
+		},
+		RTCstreamRemove(event) {
+			const remoteId = event.stream.getId();
+			const remote = this.remotes.find(remote => remote.id === remoteId);
+			const remoteEl = document.getElementById('remote');
+			remoteEl.remove(remote);
+			this.remotes.splice(this.remotes.indexOf(remote), 1);
 		},
 		sendMsg() {},
 	},

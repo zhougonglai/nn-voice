@@ -120,6 +120,10 @@ export default class RTC extends EventEmitter {
 		});
 	}
 
+	unsubscribeClient() {
+		this.client.off('*');
+	}
+
 	subscribeSteamEvents() {
 		const events = [PLAYER_STATE_CHANGED, SCREEN_SHARING_STOPPED];
 		events.forEach(eventName => {
@@ -132,27 +136,17 @@ export default class RTC extends EventEmitter {
 
 	subscribe(callback) {
 		this.client.on(STREAM_ADDED, callback);
-		// console.log('远端流增加: ' + event.stream.getId());
-		// this.client.subscribe(event.stream);
-		// callback(event);
 	}
 
 	subscribed(callback) {
 		this.client.on(STREAM_SUBSCRIBED, callback);
-		// const remoteId = 'remote_stream-' + event.stream.getId();
-		// console.log('远端流订阅成功：' + remoteId);
-		// event.stream.play('remote_stream-' + event.stream.getId());
-		// event.stream.play('remote');
-		// const remoteEl = document.getElementById('remote');
-		// const div = document.createElement('div');
-		// div.id = remoteId;
-		// if (this.remotes) {
-		// 	this.remotes.push(remoteId);
-		// } else {
-		// 	this.remotes = [remoteId];
-		// }
-		// remoteEl.appendChild(div);
-		// event.stream.play(remoteId);
-		// callback(event);
+	}
+
+	streamUpdate(callback) {
+		this.client.on(STREAM_UPDATED, callback);
+	}
+
+	streamRemove(callback) {
+		this.client.on(STREAM_REMOVED, callback);
 	}
 }
