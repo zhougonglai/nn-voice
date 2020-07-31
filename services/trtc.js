@@ -50,8 +50,8 @@ export default class RTC extends EventEmitter {
 	constructor() {
 		super();
 		this.init();
-		TRTC.Logger.setLogLevel(TRTC.Logger.LogLevel.DEBUG);
-		TRTC.Logger.enableUploadLog();
+		// TRTC.Logger.setLogLevel(TRTC.Logger.LogLevel.DEBUG);
+		// TRTC.Logger.enableUploadLog();
 		this.initDevice();
 	}
 

@@ -91,7 +91,7 @@ export default {
 			await localSteam
 				.initialize()
 				.then(() => {
-					localSteam.play('local');
+					localSteam.play(this.$refs.local);
 				})
 				.catch(error => {
 					switch (error.name) {
@@ -112,6 +112,7 @@ export default {
 					}
 				});
 			const states = await this.$RTC.getRemoteMutedState();
+			console.log('state', states);
 			await this.$RTC.client.publish(localSteam);
 			this.$RTC.on('network-quality', this.networkQuality);
 			this.$RTC.subscribe(this.RTCsubscribe);
