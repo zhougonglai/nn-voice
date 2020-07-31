@@ -90,6 +90,10 @@ export default class RTC extends EventEmitter {
 		return this.client.unpublish(stream || this.localStream);
 	}
 
+	async getRemoteMutedState() {
+		return this.client.getRemoteMutedState();
+	}
+
 	subscribeClientEvents() {
 		const events = [
 			STREAM_ADDED,

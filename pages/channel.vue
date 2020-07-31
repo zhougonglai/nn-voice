@@ -86,6 +86,7 @@ export default {
 				userId: this.user.id,
 				audio: true,
 				video: true,
+				mirror: true,
 			});
 			await localSteam
 				.initialize()
@@ -110,6 +111,7 @@ export default {
 							break;
 					}
 				});
+			const states = await this.$RTC.getRemoteMutedState();
 			await this.$RTC.client.publish(localSteam);
 			this.$RTC.on('network-quality', this.networkQuality);
 			this.$RTC.subscribe(this.RTCsubscribe);
@@ -129,10 +131,11 @@ export default {
 			div.id = remoteId;
 			this.remotes.push({
 				id: remoteId,
+				stream: event.stream,
 				el: div,
 			});
 			this.$refs.remote.appendChild(div);
-			event.stream.play(div);
+			event.stream.play(div, { objectFit: 'contain' });
 		},
 		sendMsg() {},
 	},
