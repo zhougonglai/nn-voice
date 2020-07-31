@@ -32,7 +32,9 @@ export default {
 	methods: {
 		...mapActions('user', ['userAction']),
 		async init() {
-			window.vConsole = new window.VConsole();
+			if (process.env.NODE_ENV === 'production' && !window.vConsole) {
+				window.vConsole = new window.VConsole();
+			}
 			if (this.user) {
 				return true;
 			} else {

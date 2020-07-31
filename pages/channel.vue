@@ -149,7 +149,9 @@ export default {
 				'id',
 			);
 			this.$nextTick(() => {
-				event.stream.play(remoteId, { objectFit: 'contain' });
+				const el = document.getElementById(remoteId);
+				console.log(el, remoteId);
+				event.stream.play(el, { objectFit: 'cover' });
 			});
 		},
 		playerStateChanged(event) {
