@@ -57,6 +57,7 @@ import RTCMixin from '@/mixins/rtc';
 
 export default {
 	layout: 'channel',
+	name: 'channelContainer',
 	data() {
 		return {
 			input: '',

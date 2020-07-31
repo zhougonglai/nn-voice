@@ -6,6 +6,7 @@ LazyLoadView#channel(:initFN="init")
 </template>
 <script>
 export default {
+	name: 'channelRoom',
 	methods: {
 		async init() {
 			return true;
