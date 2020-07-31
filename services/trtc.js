@@ -1,16 +1,6 @@
 import TRTC from 'trtc-js-sdk';
 import EventEmitter from 'events';
-
-const SDKAPPID = '1400406791';
-const userSig = [
-	'',
-	'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwoZQweKU7MSCgswUJStDEwMDEwMzc0tDiExqRUFmUSpQ3NTU1MjAwAAiWpKZCxazNDOwtDCEiRZnpgPNtAgMMvAL1zY1ca8wzSor83b1s8xKLQ2LcM8JcPJKd8yLqMgrCfZKCsmo8rRVqgUA*QgvnQ__',
-	'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zIhwlDB4pTsxIKCzBQlK0MTAwMTAzNzS0OITGpFQWZRKlDc1NTUyMDAACJakpkLFrM0M7A0NzQzhpqSmQ40M8jD0tjFwjOrMtgpKEbfJzww2LDc28vUzN3HJLk4MiurzCMzNDLKKcXFuyrbVqkWAB55L1w_',
-	'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwsZQweKU7MSCgswUJStDEwMDEwMzc0tDiExqRUFmUSpQ3NTU1MjAwAAiWpKZCxazNDOwtDA0NIaakpkONLPAICI7x8M8N9g-2aAgPCQ53CjTqdQ81NcnxN-Sw8XMrzAgKtCy1NuwsCTSVqkWAAPxLzM_',
-	'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwiZQweKU7MSCgswUJStDEwMDEwMzc0tDiExqRUFmUSpQ3NTU1MjAwAAiWpKZCxazNDM0MzUxM4OakpkONDM0tDAt28goqdzAMSjJy1Db29QxK0bfJSqt1DJG36c4Rr*kzL3Y2DuvysTMUdvXVqkWAIfaL5w_',
-	'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwqZQweKU7MSCgswUJStDEwMDEwMzc0tDiExqRUFmUSpQ3NTU1MjAwAAiWpKZCxazNDOwtDA0hqotzkwHmpkfHhjol*4b6ehU7l2Ub5blneXmFZ5i7FjpXhZYZJYVYFpokplWGVia5mJhq1QLABTZL*k_',
-	'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwmZQweKU7MSCgswUJStDEwMDEwMzc0tDiExqRUFmUSpQ3NTU1MjAwAAiWpKZCxazNDM0MzW2gKotzkwHmlmUFKNvUuibnuRimOaZWuySE*idWpXu72EUo1-hnlJhFumSmlQaEOYRnpsT5mirVAsAdRswlw__',
-];
+import { genUserSig } from './sign';
 
 /**
  * @name clientEVents
@@ -60,18 +50,23 @@ export default class RTC extends EventEmitter {
 	constructor() {
 		super();
 		this.init();
+		TRTC.Logger.setLogLevel(TRTC.Logger.LogLevel.DEBUG);
+		TRTC.Logger.enableUploadLog();
+		this.initDevice();
 	}
 
 	async init() {
 		return (this.status.support = await TRTC.checkSystemRequirements());
 	}
 
-	createClient(userId) {
+	async initDevice() {
+		return (this.device = await TRTC.getDevices());
+	}
+
+	createClient(uid) {
 		return (this.client = TRTC.createClient({
 			mode: 'rtc',
-			sdkAppId: SDKAPPID,
-			userId,
-			userSig: userSig[userId],
+			...genUserSig(uid),
 		}));
 	}
 
@@ -87,8 +82,12 @@ export default class RTC extends EventEmitter {
 		return (this.localStream = TRTC.createStream(config));
 	}
 
-	async publish() {
-		return this.client.publish(this.localStream);
+	async publish(stream) {
+		return this.client.publish(stream || this.localStream);
+	}
+
+	async unpublish(stream) {
+		return this.client.unpublish(stream || this.localStream);
 	}
 
 	subscribeClientEvents() {

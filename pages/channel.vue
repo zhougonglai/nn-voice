@@ -72,7 +72,8 @@ export default {
 			return this.getCard(this.$route.params.id);
 		},
 	},
-	beforeDestroy() {
+	async beforeDestroy() {
+		await this.$RTC.unpublish();
 		this.$RTC.leave();
 	},
 	methods: {
@@ -80,7 +81,36 @@ export default {
 			return this.initRtcClient();
 		},
 		async joinRoom(...args) {
-			await this.joinByRTC();
+			await this.$RTC.join(this.$route.params.id);
+			const localSteam = this.$RTC.createStream({
+				userId: this.user.id,
+				audio: true,
+				video: true,
+			});
+			await localSteam
+				.initialize()
+				.then(() => {
+					localSteam.play('local');
+				})
+				.catch(error => {
+					switch (error.name) {
+						case 'NotFoundError':
+							window.weui.alert('没找到可用设备');
+							break;
+						case 'NotAllowedError':
+							window.weui.alert('访问摄像头/麦克风被拒绝');
+							break;
+						case 'NotReadableError':
+							window.weui.alert(
+								'暂时无法访问摄像头/麦克风，请确保当前没有其他应用请求访问摄像头/麦克风，并重试',
+							);
+							break;
+						case 'AbortError':
+							window.weui.alert('由于某些未知原因导致设备无法被使用');
+							break;
+					}
+				});
+			await this.$RTC.client.publish(localSteam);
 			this.$RTC.on('network-quality', this.networkQuality);
 			this.$RTC.subscribe(this.RTCsubscribe);
 			this.$RTC.subscribed(this.RTCsubscribed);
@@ -112,7 +142,7 @@ export default {
 #local {
 	position: absolute;
 	right: 10px;
-	bottom: 10px;
+	top: calc(25vh + 10px);
 	width: 25vw;
 	height: 40vw;
 	border-radius: 4px;
