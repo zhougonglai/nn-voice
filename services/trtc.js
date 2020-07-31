@@ -132,6 +132,9 @@ export default class RTC extends EventEmitter {
 		});
 	}
 
+	/**
+	 * 危险!!!⚠️ 慎用
+	 */
 	unsubscribeClient() {
 		this.client.off('*');
 	}
