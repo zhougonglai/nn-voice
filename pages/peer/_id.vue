@@ -47,7 +47,7 @@ export default {
 		.message-ctx {
 			position: relative;
 			padding: 8px;
-			background-color: var(--weui-BG-5);
+			background-color: var(--weui-BG-3);
 			color: var(--weui-FG-0);
 			line-height: 18px;
 			font-size: 18px;
@@ -67,7 +67,7 @@ export default {
 					width: 0;
 					height: 0;
 					border-top: transparent 0.425rem solid;
-					border-right: var(--weui-BG-5) 0.425rem solid;
+					border-right: var(--weui-BG-3) 0.425rem solid;
 					border-bottom: transparent 0.425rem solid;
 				}
 			}

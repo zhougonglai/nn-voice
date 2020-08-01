@@ -1,5 +1,5 @@
 <template lang="pug">
-LazyLoadView.h-full(:initFN="init" @rendered="joinRoom")
+LazyLoadView.h-full(:initFN="init" @rendered="connect")
 	template(#loading)
 		CircleLoader
 	v-app-bar(app fixed elevate-on-scroll)
@@ -53,8 +53,8 @@ LazyLoadView.h-full(:initFN="init" @rendered="joinRoom")
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import RTCMixin from '@/mixins/rtc';
 import { unionBy } from 'lodash';
+import RTCMixin from '@/mixins/rtc';
 
 export default {
 	layout: 'channel',
@@ -77,55 +77,46 @@ export default {
 		},
 	},
 	async beforeDestroy() {
-		await this.$RTC.unpublish();
+		await this.unpublishLocalRTC();
+		this.$RTC.unsubscribeClient();
 		this.$RTC.close();
 		this.$RTC.leave();
 	},
 	methods: {
 		async init() {
-			return this.initRtcClient();
+			return true;
 		},
-		async joinRoom(...args) {
-			await this.$RTC.join(this.$route.params.id);
+		async connect(...args) {
 			this.$RTC.subscribe(this.RTCsubscribe);
 			this.$RTC.subscribed(this.RTCsubscribed);
 			this.$RTC.streamUpdate(this.RTCstreamUpdate);
 			this.$RTC.streamRemove(this.RTCstreamRemove);
+			await this.joinRTC(this.$route.params.id);
 			this.$RTC.peerJoin(this.RTCPeerJoin);
 			this.$RTC.peerLeave(this.RTCPeerLeave);
-			const localSteam = this.$RTC.createStream({
-				userId: this.user.id,
+			const localStream = await this.publishLocalRTC({
 				audio: true,
 				video: true,
 				mirror: true,
+			}).catch(error => {
+				switch (error.name) {
+					case 'NotFoundError':
+						window.weui.alert('没找到可用设备');
+						break;
+					case 'NotAllowedError':
+						window.weui.alert('访问摄像头/麦克风被拒绝');
+						break;
+					case 'NotReadableError':
+						window.weui.alert(
+							'暂时无法访问摄像头/麦克风，请确保当前没有其他应用请求访问摄像头/麦克风，并重试',
+						);
+						break;
+					case 'AbortError':
+						window.weui.alert('由于某些未知原因导致设备无法被使用');
+						break;
+				}
 			});
-			await localSteam
-				.initialize()
-				.then(() => {
-					localSteam.play(this.$refs.local);
-				})
-				.catch(error => {
-					switch (error.name) {
-						case 'NotFoundError':
-							window.weui.alert('没找到可用设备');
-							break;
-						case 'NotAllowedError':
-							window.weui.alert('访问摄像头/麦克风被拒绝');
-							break;
-						case 'NotReadableError':
-							window.weui.alert(
-								'暂时无法访问摄像头/麦克风，请确保当前没有其他应用请求访问摄像头/麦克风，并重试',
-							);
-							break;
-						case 'AbortError':
-							window.weui.alert('由于某些未知原因导致设备无法被使用');
-							break;
-					}
-				});
-			const states = await this.$RTC.getRemoteMutedState();
-			console.log('state', states);
-			await this.$RTC.client.publish(localSteam);
-			this.$RTC.on('network-quality', this.networkQuality);
+			localStream.play(this.$refs.local);
 		},
 		networkQuality(localQuality) {
 			this.quality.local = localQuality;

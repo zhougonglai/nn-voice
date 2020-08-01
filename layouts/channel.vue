@@ -10,6 +10,7 @@ import LazyLocadView from '@/components/wc/LazyLoadView';
 import PageHold from '@/components/container/PageHold';
 import { mapState, mapActions } from 'vuex';
 import RTMmixin from '@/mixins/rtm';
+import RTCMixin from '@/mixins/rtc';
 
 export default {
 	name: 'ChannelLayout',
@@ -20,7 +21,7 @@ export default {
 		LazyLocadView,
 		PageHold,
 	},
-	mixins: [RTMmixin],
+	mixins: [RTMmixin, RTCMixin],
 	computed: {
 		...mapState('user', ['user']),
 	},
