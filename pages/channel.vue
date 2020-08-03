@@ -122,11 +122,11 @@ export default {
 			this.quality.local = localQuality;
 		},
 		RTCsubscribe(event) {
-			console.log('RTCsubscribe', event);
+			// console.log('RTCsubscribe', event);
 			this.$RTC.client.subscribe(event.stream);
 		},
 		RTCsubscribed(event) {
-			console.log('RTCsubscribed', event);
+			// console.log('RTCsubscribed', event);
 			const remoteStream = event.stream;
 			remoteStream.on('player-state-changed', this.playerStateChanged);
 			const remoteId = event.stream.getId();
