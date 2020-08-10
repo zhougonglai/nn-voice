@@ -82,6 +82,11 @@ export default {
 	axios: {
 		proxy: true,
 	},
+	env: {
+		SDKAPPID: 1400406791,
+		SECRETKEY:
+			'08f48a95bbad9def0d4795433e697bf43b9623ef3b6175af30ee967f38652af7',
+	},
 	dotenv: {
 		filename: `.env.${process.env.NODE_ENV}`,
 	},

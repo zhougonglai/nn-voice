@@ -29,6 +29,13 @@ LazyLoadView.h-full(:initFN="init" @rendered="connect")
 				#local(
 					ref="local"
 					:class="[{good: quality.local && quality.local.uplinkNetworkQuality < 3,normal: quality.local && quality.local.uplinkNetworkQuality === 3,bad:  quality.local && quality.local.uplinkNetworkQuality >= 3}]")
+				#controls
+					#camera
+						v-btn(icon)
+							v-icon videocam
+					#speakers
+						v-btn(icon)
+							v-icon volume_up
 			nuxt-child
 	v-footer.safe-aria(app fixed)
 		v-input(dense :hide-details="true")
@@ -122,7 +129,6 @@ export default {
 			this.quality.local = localQuality;
 		},
 		RTCsubscribe(event) {
-			// console.log('RTCsubscribe', event);
 			this.$RTC.client.subscribe(event.stream);
 		},
 		RTCsubscribed(event) {
@@ -134,11 +140,11 @@ export default {
 				this.remotes.concat([
 					{
 						id: remoteId,
-						stream: event.stream,
+						event,
 					},
 				]),
-				'id',
 			);
+
 			this.$nextTick(() => {
 				const el = document.getElementById(remoteId);
 				event.stream.play(el, { objectFit: 'cover' });
@@ -166,12 +172,14 @@ export default {
 		},
 		RTCPeerLeave(event) {
 			const userId = event.userId;
+			this.peers.delete(userId);
 			this.peers.splice(
 				this.peers.findIndex(peer => peer.id === userId),
 				1,
 			);
 		},
 		sendMsg() {},
+		deleteMsg(msg) {},
 	},
 };
 </script>
@@ -208,5 +216,17 @@ export default {
 	grid-column-gap: 4px;
 	grid-row-gap: 4px;
 	background-color: var(--weui-FG-3);
+}
+
+#controls {
+	width: 25vw;
+	height: 10vw;
+	position: absolute;
+	right: 10px;
+	top: calc(25vh + 40vw + 20px);
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
+	z-index: 9;
 }
 </style>

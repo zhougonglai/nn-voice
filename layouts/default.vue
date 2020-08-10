@@ -51,6 +51,7 @@ export default {
 			'(prefers-color-scheme: dark)',
 		).matches;
 		this.active = this.$route.name;
+		console.log('test', process.env.test);
 	},
 	methods: {
 		...mapActions('user', ['userAction']),

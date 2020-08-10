@@ -63,43 +63,46 @@ export default class RTC extends EventEmitter {
 		return (this.device = await TRTC.getDevices());
 	}
 
-	createClient(uid) {
-		return (this.client = TRTC.createClient({
-			mode: 'rtc',
+	createClient(uid, mode = 'rtc') {
+		this.client = TRTC.createClient({
+			mode,
 			...genUserSig(uid),
-		}));
+		});
+		this.emit('clientReady', this.client);
+		return this.client;
 	}
 
 	async join(roomId) {
-		return this.client
+		return await this.client
 			.join({ roomId })
 			.then(() => (this.joined = true))
 			.catch(() => (this.joined = false));
 	}
 
 	async leave() {
-		return this.client.leave();
+		return await this.client.leave();
 	}
 
 	close() {
-		this.localStream.stop();
 		this.localStream.close();
 		this.localStream = null;
 	}
 
 	createStream(config) {
-		return (this.localStream = TRTC.createStream(config));
+		this.localStream = TRTC.createStream(config);
+		this.emit('localStream', this.localStream);
+		return this.localStream;
 	}
 
 	async publish(stream) {
-		return this.client
+		return await this.client
 			.publish(stream || this.localStream)
 			.then(() => (this.published = true))
 			.catch(() => (this.published = false));
 	}
 
 	async unpublish(stream) {
-		return this.client.unpublish(stream || this.localStream);
+		return await this.client.unpublish(stream || this.localStream);
 	}
 
 	async getRemoteMutedState() {
