@@ -8,12 +8,15 @@ LazyLocadView(:initFN="init" v-cloak)
 				template(#active)
 					keep-alive(:include="['index', 'more', 'me']")
 						nuxt
-				WeTabItem(label="主页" name="index")
+				WeTabItem(label="消息" name="index")
 					template(#icon)
 						i.material-icons.weui-tabbar__icon home
-				WeTabItem(label='更多社区' name="more")
+				WeTabItem(label='房间' name="more")
 					template(#icon)
 						i.material-icons.weui-tabbar__icon apps
+				WeTabItem(label='动态' name="explore")
+					template(#icon)
+						i.material-icons.weui-tabbar__icon explore
 				WeTabItem(:label="`${user.first_name} ${user.last_name}`" v-if="user" :icon="user.avatar" name="me")
 				WeTabItem(label="我的" v-else name="me" icon="https://dfs01.nn.com/group1/M00/00/19/rB8AIF8RSeyACRJoAAAKmXbq74c060.png")
 </template>
@@ -32,6 +35,7 @@ export default {
 			tabs: {
 				index: '/',
 				more: '/more',
+				explore: '/explore',
 				me: '/me',
 			},
 			darkmode: false,
@@ -51,7 +55,6 @@ export default {
 			'(prefers-color-scheme: dark)',
 		).matches;
 		this.active = this.$route.name;
-		console.log('test', process.env.test);
 	},
 	methods: {
 		...mapActions('user', ['userAction']),

@@ -1,5 +1,5 @@
 import RTC from '~/services/trtc';
-import RTM from '~/services/rtm';
+import RTM from '~/services/trtm';
 import Vue from 'vue';
 
 const $RTC = new RTC();

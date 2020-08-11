@@ -14,7 +14,7 @@ const EVENTS = [
 	TIM.EVENT.BLACKLIST_UPDATED,
 	TIM.EVENT.ERROR,
 	TIM.EVENT.SDK_NOT_READY,
-	IM.EVENT.KICKED_OUT,
+	TIM.EVENT.KICKED_OUT,
 	TIM.EVENT.NET_STATE_CHANGE,
 ];
 
@@ -22,8 +22,8 @@ export default class RTM extends EventEmitter {
 	constructor() {
 		super();
 		this.tim = TIM.create({ SDKAppID: process.env.SDKAPPID });
-		tim.setLogLevel(process.env.NODE_ENV === 'production' ? 1 : 0);
-		tim.registerPlugin({ 'cos-wx-sdk': COS });
+		this.tim.setLogLevel(process.env.NODE_ENV === 'production' ? 1 : 0);
+		this.tim.registerPlugin({ 'cos-wx-sdk': COS });
 	}
 
 	subscribeTim() {
@@ -36,9 +36,22 @@ export default class RTM extends EventEmitter {
 	}
 
 	async login(userID) {
-		return await this.tim.login({
+		const { code, data } = await this.tim.login({
 			...genUserSig(userID),
 			userID,
+		});
+		if (data) {
+			this.config = data;
+			if (data.repeatLogin) {
+				return { code, data, msg: data.errorInfo };
+			}
+		}
+		return { code, data };
+	}
+
+	async updateMyProfile(profile) {
+		this.tim.updateMyProfile({
+			...profile,
 		});
 	}
 
