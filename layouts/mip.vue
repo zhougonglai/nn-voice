@@ -1,5 +1,5 @@
 <template lang="pug">
-LazyLocadView(:initFN="init" v-cloak)
+LazyLocadView.appearance-none(:initFN="init" v-cloak)
 	template(#loading)
 		PageHold
 	header.mip-nav-wrapper
@@ -80,6 +80,7 @@ header {
 	right: 0;
 	background-color: var(--weui-BG-0);
 	height: fit-content;
+	z-index: 9;
 }
 #bs-navbar {
 	background-color: var(--weui-BG-0);
