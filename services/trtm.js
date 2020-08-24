@@ -163,6 +163,45 @@ export default class RTM extends EventEmitter {
 	}
 
 	/* ------------------------   Message ------------------------  */
+	/**
+	 *
+	 * @param {*} to
+	 * @param {*} payload {text}
+	 * @param {*} type [CONV_C2C, CONV_GROUP]
+	 */
+	createTextMessage(to, payload, type = 'CONV_C2C', ...args) {
+		return this.tim.createTextMessage({
+			to,
+			payload,
+			conversationType: TIM.TYPES[type],
+			...args,
+		});
+	}
+
+	/**
+	 *
+	 * @param {*} to
+	 * @param {*} payload {file}
+	 * @param {*} cb fun(event)
+	 * @param {*} type
+	 * @param  {...any} args
+	 */
+	createImageMessage(to, payload, cb, type = 'CONV_C2C', ...args) {
+		return this.tim.createImageMessage({
+			to,
+			payload,
+			conversationType: TIM.TYPES[type],
+			onProcess: cb,
+			...args,
+		});
+	}
+
+	createAudioMessage() {}
+
+	async sendMessage(msg, option) {
+		return await this.tim.sendMessage(msg, option);
+	}
+
 	/* ------------------------   Conversation ------------------------  */
 	/* ------------------------   Profile ------------------------  */
 	/* ------------------------   Group ------------------------  */

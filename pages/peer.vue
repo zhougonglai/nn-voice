@@ -25,6 +25,9 @@ LazyLoadView.h-screen(:initFN="init")
 				.w-10.h-10.flex.items-center.justify-center
 					v-btn(icon)
 						v-icon keyboard_voice
+				.w-10.h-10.flex.items-center.justify-center
+					v-btn(icon)
+						v-icon mood
 			v-textarea(
 				dense
 				filled
@@ -32,13 +35,10 @@ LazyLoadView.h-screen(:initFN="init")
 				v-model.trim="input"
 				rows="1"
 				row-height="20")
-			template(#append)
-				.w-10.h-10.flex.items-center.justify-center
-					v-btn(icon)
-						v-icon mood
-				.w-10.h-10.flex.items-center.justify-center(@click="sendMsg")
-					v-btn(icon)
-						v-icon send
+				template(#append)
+					.w-10.h-10.flex.items-center.justify-center(@click="sendMsg")
+						v-btn(icon)
+							v-icon send
 </template>
 <script>
 import { mapState, mapGetters, mapMutations } from 'vuex';
@@ -71,18 +71,11 @@ export default {
 		},
 		sendMsg: throttle(async function() {
 			if (this.input) {
-				const { hasPeerReceived } = await this.$RTM.sendPeerMessage(
-					this.input,
-					this.$route.params.id,
+				await this.$RTM.sendMessage(
+					await this.$RTM.createTextMessage(this.$route.params.id, {
+						text: this.input,
+					}),
 				);
-				this.MSG_UPDATE({
-					messageType: 'TEXT',
-					pid: this.user.id,
-					sendTo: this.$route.params.id,
-					text: this.input,
-					serverReceivedTs: Date.now(),
-					received: hasPeerReceived,
-				});
 				this.input = '';
 			}
 		}, 650),
